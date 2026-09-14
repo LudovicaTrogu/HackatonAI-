@@ -18,6 +18,7 @@ Solo questo file (`CLAUDE.md`) viene caricato automaticamente in ogni sessione. 
 | [docs/RUNBOOK.md](docs/RUNBOOK.md) | runbook | Per far girare la demo: servire localhost, caricare l'estensione, configurare la key, eseguire il giro. |
 | [docs/demo-script.md](docs/demo-script.md) | scaletta | Coreografia della demo live before/after (distinta dal deliverable TK-009.2). |
 | [docs/deliverable-1-persona-barriera.md](docs/deliverable-1-persona-barriera.md) | deliverable | Deliverable 1 del tema (TK-009.1): persona Marco e momento esatto del blocco ancorati al modulo demo. |
+| [docs/deliverable-2-percorso-assistito.md](docs/deliverable-2-percorso-assistito.md) | deliverable | Deliverable 2 del tema (TK-009.2): before/after sullo stesso campo/persona del Deliverable 1. |
 
 **Regola di manutenzione (a costo zero, non facoltativa):** chi crea o modifica un documento in `docs/` aggiunge o aggiorna la riga corrispondente in questa tabella nello stesso commit. Senza questa riga il documento resta invisibile a una sessione futura, esattamente come è successo a `DR-002-decisione-flotta-agenti.md` e `DR-002-taskboard.md` prima di DR-003.
 

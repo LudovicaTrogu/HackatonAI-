@@ -45,7 +45,7 @@ Stati: `TODO` · `WIP` · `BLOCKED` · `DONE` · `SKIP`.
 | TK-008.2 | S5 · Test L2 DOM fixture | B | agent | TK-004.2 | TODO | | |
 | TK-008.3 | S5 · Spike Playwright (cap 20') | B | agent | TK-008.2 | TODO | | |
 | TK-009.1 | S6 · Persona & Barriera | B | either | demo osservabile | DONE | docs/deliverable-1-persona-barriera.md: persona Marco + momento del blocco su #classe-invalidita (demo/index.html), con nota sugli altri 2 campi target | 2026-09-14 |
-| TK-009.2 | S6 · Percorso Assistito (before/after) | B | either | demo osservabile | WIP | | |
+| TK-009.2 | S6 · Percorso Assistito (before/after) | B | either | demo osservabile | DONE | docs/deliverable-2-percorso-assistito.md: before/after su #classe-invalidita (stesso campo/persona di TK-009.1); "dopo" dichiarato come progetto vincolato dai contratti (manifest.json, lib/messages.js), non ancora verificato end-to-end (TK-014 pendente) | 2026-09-14 |
 | TK-009.3 | S6 · Autonomia & Limiti + nota AI | B | either | TK-006 | TODO | | |
 | TK-010 | Skill extract-field-context | B | agent | TK-004.1 | TODO | | |
 | TK-011 | Skill prompt-da-dato-non-fidato | A | agent | TK-003.1 | TODO | | |
@@ -106,3 +106,4 @@ Stati: `TODO` · `WIP` · `BLOCKED` · `DONE` · `SKIP`.
 | 2026-09-14 | TK-009.1 | WIP | Preso in carico: deliverable "Persona & Barriera" in docs/. Dipendenza "demo osservabile" verificata DONE (TK-001.2/.3). |
 | 2026-09-14 | TK-009.1 | DONE | docs/deliverable-1-persona-barriera.md creato: ancorato a demo/index.html (#classe-invalidita come momento esatto del blocco) e action-log.md. Indice CLAUDE.md aggiornato (DR-003). |
 | 2026-09-14 | TK-009.2 | WIP | Preso in carico: deliverable "Percorso Assistito (before/after)" in docs/. Dipendenza "demo osservabile" verificata DONE (TK-001.2/.3). |
+| 2026-09-14 | TK-009.2 | DONE | docs/deliverable-2-percorso-assistito.md creato: before osservato + after di progetto sullo stesso campo/persona di TK-009.1, con nota esplicita che il giro end-to-end non è ancora implementato/verificato (TK-002.3/003.x/004.x/TK-014). Indice CLAUDE.md aggiornato (DR-003). |
