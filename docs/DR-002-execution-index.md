@@ -44,7 +44,7 @@ Stati: `TODO` · `WIP` · `BLOCKED` · `DONE` · `SKIP`.
 | TK-008.1 | S5 · Test L1 statici | B | agent | TK-002.2, TK-004.2 | TODO | | |
 | TK-008.2 | S5 · Test L2 DOM fixture | B | agent | TK-004.2 | TODO | | |
 | TK-008.3 | S5 · Spike Playwright (cap 20') | B | agent | TK-008.2 | TODO | | |
-| TK-009.1 | S6 · Persona & Barriera | B | either | demo osservabile | WIP | | 2026-09-14 |
+| TK-009.1 | S6 · Persona & Barriera | B | either | demo osservabile | DONE | docs/deliverable-1-persona-barriera.md: persona Marco + momento del blocco su #classe-invalidita (demo/index.html), con nota sugli altri 2 campi target | 2026-09-14 |
 | TK-009.2 | S6 · Percorso Assistito (before/after) | B | either | demo osservabile | TODO | | |
 | TK-009.3 | S6 · Autonomia & Limiti + nota AI | B | either | TK-006 | TODO | | |
 | TK-010 | Skill extract-field-context | B | agent | TK-004.1 | TODO | | |
@@ -104,3 +104,4 @@ Stati: `TODO` · `WIP` · `BLOCKED` · `DONE` · `SKIP`.
 | 2026-09-14 | TK-016 | DONE | docs/demo-script.md creato (scaletta before/after + frase AI). Rifinire dopo build. |
 | 2026-09-14 | TK-015 | WIP | docs/RUNBOOK.md bozza: passi 1-2 eseguibili; 3-5 TODO fino a Fase 1 DONE. |
 | 2026-09-14 | TK-009.1 | WIP | Preso in carico: deliverable "Persona & Barriera" in docs/. Dipendenza "demo osservabile" verificata DONE (TK-001.2/.3). |
+| 2026-09-14 | TK-009.1 | DONE | docs/deliverable-1-persona-barriera.md creato: ancorato a demo/index.html (#classe-invalidita come momento esatto del blocco) e action-log.md. Indice CLAUDE.md aggiornato (DR-003). |
