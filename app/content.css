@@ -1,0 +1,256 @@
+/* content.css — TK-004.3 · S3 — stile del pannello di spiegazione iniettato nella pagina ospite.
+ *
+ * CONTRATTO CON TK-004.2 (content.js, congelato — NON toccato da questo task).
+ * I selettori qui sotto usano ESATTAMENTE i class name emessi nel commento di testa di content.js
+ * (righe 9-13) e nient'altro:
+ *   .accanto-panel        → <div id="accanto-panel" class="accanto-panel" role="status"
+ *                            aria-live="polite" hidden> creato in ensurePanel()
+ *   .accanto-panel__text  → <p class="accanto-panel__text"> figlio del pannello
+ *   [data-accanto-state="info" | "sensitive" | "error"] → attributo impostato da announce()
+ * Nessun altro class name è usato: non esiste altro markup emesso da content.js.
+ *
+ * ------------------------------------------------------------------------------------------
+ * 1) INTERAZIONE CON L'ATTRIBUTO `hidden` (INV-7 — chiusura con Esc)
+ * ------------------------------------------------------------------------------------------
+ * content.js nasconde/mostra il pannello SOLO con la proprietà DOM `panel.hidden = true/false`
+ * (ensurePanel(), announce(), closePanel()) — non con classi, non con style inline.
+ * `hidden` è reso dallo UA con `display: none` a specificità 0,0,0: qualunque regola di classe che
+ * imposti `display` (qui sotto `.accanto-panel { display: block }`) la sovrascriverebbe e il
+ * pannello resterebbe visibile anche dopo Esc → Esc sembrerebbe rotto e si violerebbe INV-7.
+ * Per questo la regola `.accanto-panel[hidden]` più sotto è OBBLIGATORIA e non va rimossa.
+ *
+ * ------------------------------------------------------------------------------------------
+ * 2) CONTRASTO PUNTATO
+ * ------------------------------------------------------------------------------------------
+ * Il pannello porta il PROPRIO sfondo opaco, quindi il contrasto NON dipende dallo sfondo della
+ * pagina ospite (funziona identico su pagina chiara e su pagina scura). Rapporti calcolati con la
+ * formula WCAG 2.x (luminanza relativa), superficie di riferimento #0B0F14:
+ *   - testo #FFFFFF su #0B0F14 ...... ~19.2:1   (target: molto oltre AA 4.5:1 e AAA 7:1)
+ *   - barra "info"      #8AB4F8 ..... ~9.1:1    (elemento non testuale, soglia AA 3:1)
+ *   - barra "sensitive" #FFD166 ..... ~13.3:1
+ *   - barra "error"     #FF8A80 ..... ~8.4:1
+ * Target dichiarato: >= 15:1 per il testo, >= 7:1 per ogni elemento grafico portatore di stato.
+ * Su pagina ospite SCURA il pannello rischierebbe di confondersi col fondo: è per questo che c'è
+ * un anello chiaro (box-shadow a spread, primo layer) che ne delimita sempre il bordo.
+ *
+ * ------------------------------------------------------------------------------------------
+ * 3) NIENTE INFORMAZIONE DAL SOLO COLORE
+ * ------------------------------------------------------------------------------------------
+ * I tre stati si distinguono per GEOMETRIA, leggibile anche in scala di grigi e in modalità
+ * contrasto elevato di Windows (dove i colori vengono rimpiazzati dal sistema):
+ *   info      → barra sinistra SOLID sottile  + angoli arrotondati su tutti i lati
+ *   sensitive → barra sinistra DOUBLE spessa  + contorno tratteggiato (dashed) su tutto il pannello
+ *   error     → barra sinistra SOLID spessa   + cornice piena sopra/sotto/destra + angoli vivi
+ * Il colore è ridondante, mai l'unico canale.
+ * Scelta deliberata: NON uso pseudo-elementi con `content:` testuale (es. "i", "!"). Il pannello È
+ * la regione aria-live: il contenuto generato da CSS può essere incluso nell'annuncio da alcuni
+ * screen reader, e aggiungerebbe rumore imprevedibile a un messaggio già scritto da content.js.
+ * La distinzione è quindi puramente geometrica. Da confermare in TK-014.
+ *
+ * ------------------------------------------------------------------------------------------
+ * 4) ROBUSTEZZA NELLA PAGINA OSPITE
+ * ------------------------------------------------------------------------------------------
+ * Nessun selettore generico (mai body/div/input/p nudi): solo `.accanto-*`, così la pagina ospite
+ * non viene mai alterata. In senso inverso le regole della pagina potrebbero alterare il pannello:
+ * per questo tutte le proprietà ereditate rilevanti (font, colore, allineamento, direzione,
+ * box-sizing, margini del <p>) sono RIDICHIARATE esplicitamente invece di essere lasciate ereditare.
+ * `!important` è usato su 3 sole dichiarazioni, ognuna giustificata sulla riga.
+ */
+
+.accanto-panel {
+  /* --- posizionamento: fisso in basso a destra ---------------------------------------------
+   * Motivazione (requisito "non invasivo"): il campo che Marco sta compilando e i campi
+   * successivi stanno nella colonna del modulo, che nei moduli PA scorre dall'alto verso il
+   * basso al centro/sinistra della pagina. Un pannello ancorato all'angolo in basso a destra
+   * del VIEWPORT (non del documento) non si sovrappone mai né al campo attivo né al campo che
+   * riceverà il Tab successivo, e non si sposta mentre la pagina scorre. In più è la posizione
+   * convenzionale dei messaggi di stato, quindi leggibile anche dalla platea durante la demo.
+   * Limite noto e accettato: può coprire contenuto della pagina ospite ancorato allo stesso
+   * angolo. È accettabile perché il pannello è effimero e si chiude con Esc (INV-7), e perché
+   * il canale primario per Marco resta l'annuncio dello screen reader.
+   * `!important` #1: senza `position: fixed` il pannello finirebbe in fondo al <body> nel flusso
+   * e coprirebbe i campi; una regola aggressiva della pagina ospite (es. `[id] { position:
+   * static !important }`) romperebbe il requisito "non invasivo". */
+  position: fixed !important;
+  inset-block-end: 1rem;
+  inset-inline-end: 1rem;
+  /* `!important` #2: il pannello deve stare sopra header sticky, overlay e cookie banner della
+   * pagina ospite, altrimenti l'unica uscita visiva dell'estensione risulta invisibile. */
+  z-index: 2147483647 !important;
+
+  /* --- dimensioni: nessuna altezza fissa, testo mai troncato ------------------------------- */
+  display: block; /* vedi la regola [hidden] subito sotto: è ciò che la rende obbligatoria */
+  box-sizing: border-box;
+  /* larghezza in unità relative: scala con la dimensione del carattere dell'utente e con lo
+   * zoom; su viewport strette si riduce da sola e non provoca scroll orizzontale. */
+  inline-size: min(34rem, calc(100vw - 2rem));
+  /* NESSUNA `height`: il pannello cresce quanto serve al testo. Il `max-block-size` è solo una
+   * valvola di sicurezza per non coprire l'intero schermo con una risposta anomala; il testo
+   * resta comunque INTERO nel DOM, quindi lo screen reader lo annuncia tutto anche nella parte
+   * eventualmente non visibile. */
+  max-block-size: calc(100vh - 2rem);
+  overflow-y: auto;
+
+  /* --- tipografia: mai px per font-size ----------------------------------------------------
+   * `rem` segue la dimensione del carattere impostata nel browser/sistema e lo zoom al 200%.
+   * Limite documentato: se la pagina ospite applica il trucco `html { font-size: 62.5% }`, il
+   * rem della pagina vale 10px e il pannello rimpicciolisce con lei; per questo la base è
+   * generosa (1.125rem ≈ 18px con root di default) invece di 1rem. */
+  font-size: 1.125rem;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: start;
+  text-transform: none;
+  direction: inherit; /* rispetta la direzione del documento ospite (it = ltr) */
+
+  /* --- colori e superficie ----------------------------------------------------------------- */
+  color: #ffffff;
+  background-color: #0b0f14;
+  padding: 0.75rem 1rem;
+  margin: 0;
+  /* anello chiaro (1° layer) = il bordo del pannello resta visibile anche su pagina ospite
+   * scura; ombra (2° layer) = stacco su pagina ospite chiara. */
+  box-shadow: 0 0 0 0.125rem #f2f4f7, 0 0.5rem 1.5rem rgb(0 0 0 / 0.55);
+
+  /* --- default di stato (se l'attributo mancasse, il pannello è comunque leggibile) --------- */
+  border: 0 solid #f2f4f7;
+  border-inline-start-width: 0.375rem;
+  border-radius: 0.5rem;
+
+  /* --- comparsa: unica animazione del file, disattivata più sotto in reduced-motion --------- */
+  animation: accanto-panel-appear 140ms ease-out both;
+}
+
+/* OBBLIGATORIA — vedi nota 1 in testa al file.
+ * content.js chiude il pannello con `panel.hidden = true`; senza questa riga il `display: block`
+ * della regola precedente vincerebbe sullo stile UA di `hidden` e il pannello non si chiuderebbe
+ * mai (INV-7 violato).
+ * `!important` #3: questa è una regola di sicurezza funzionale, non estetica — deve vincere anche
+ * su eventuali regole della pagina ospite su `[hidden]`. È l'unico punto del file in cui
+ * `!important` protegge un invariante. */
+.accanto-panel[hidden] {
+  display: none !important;
+}
+
+.accanto-panel__text {
+  /* il nodo è un <p>: azzero i margini UA e quelli della pagina ospite, altrimenti il testo
+   * "balla" dentro il pannello a seconda del sito. */
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  /* nessun clamp di righe, nessun ellipsis: il testo va a capo e non viene mai troncato */
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+  max-inline-size: 62ch; /* misura di riga confortevole, in unità relative al carattere */
+}
+
+/* ============================================================================================
+ * STATI — colore + geometria ridondanti (vedi nota 3)
+ * ========================================================================================= */
+
+/* info — spiegazione normale: barra sinistra sottile e continua, angoli morbidi */
+.accanto-panel[data-accanto-state="info"] {
+  border-inline-start: 0.375rem solid #8ab4f8;
+  border-radius: 0.5rem;
+}
+
+/* sensitive — campo password/pagamento non spiegato (INV-4): barra DOUBLE spessa + contorno
+ * tratteggiato su tutto il perimetro. In scala di grigi si riconosce dal tratteggio. */
+.accanto-panel[data-accanto-state="sensitive"] {
+  border-inline-start: 0.75rem double #ffd166;
+  border-radius: 0.25rem;
+  outline: 0.1875rem dashed #ffd166;
+  outline-offset: 0.1875rem;
+}
+
+/* error — messaggio neutro di errore: cornice piena su tutti i lati + angoli vivi.
+ * In scala di grigi si riconosce dalla cornice chiusa e dallo spigolo. */
+.accanto-panel[data-accanto-state="error"] {
+  border: 0.1875rem solid #ff8a80;
+  border-inline-start-width: 0.75rem;
+  border-radius: 0;
+}
+
+/* ============================================================================================
+ * PREFERENZE UTENTE
+ * ========================================================================================= */
+
+@keyframes accanto-panel-appear {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Movimento: il file ha una sola animazione (la comparsa) e qui viene annullata del tutto.
+ * `animation: none` è sufficiente; azzero anche le transition come guardia, nel caso qualcuno
+ * ne aggiunga in futuro senza ricordarsi di questo blocco. */
+@media (prefers-reduced-motion: reduce) {
+  .accanto-panel {
+    animation: none;
+    transition: none;
+  }
+  .accanto-panel__text {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Contrasto elevato richiesto dall'utente: bianco puro su nero puro = 21:1, bordi più spessi. */
+@media (prefers-contrast: more) {
+  .accanto-panel {
+    color: #ffffff;
+    background-color: #000000;
+    box-shadow: 0 0 0 0.1875rem #ffffff;
+  }
+  .accanto-panel[data-accanto-state="info"] {
+    border-inline-start-width: 0.5rem;
+  }
+  .accanto-panel[data-accanto-state="sensitive"] {
+    border-inline-start-width: 0.875rem;
+    outline-width: 0.25rem;
+  }
+  .accanto-panel[data-accanto-state="error"] {
+    border-width: 0.25rem;
+    border-inline-start-width: 0.875rem;
+  }
+}
+
+/* Modalità contrasto elevato di Windows (forced-colors), usata spesso da chi ha un residuo
+ * visivo come Marco. Lì il browser sostituisce d'autorità colori di testo, sfondo e bordi: i
+ * colori dichiarati sopra SPARISCONO. Il pannello resta corretto perché:
+ *  - uso i colori di sistema (Canvas/CanvasText) invece di valori hardcoded, quindi il pannello
+ *    resta opaco e non si fonde con la pagina;
+ *  - la distinzione fra i tre stati è geometrica (spessore, double, dashed, cornice, raggio):
+ *    queste proprietà NON vengono forzate dal sistema e sopravvivono intatte.
+ * Le box-shadow vengono ignorate in forced-colors: la sostituisco con un bordo reale. */
+@media (forced-colors: active) {
+  .accanto-panel {
+    color: CanvasText;
+    background-color: Canvas;
+    box-shadow: none;
+    border-color: CanvasText;
+    border-block-width: 0.125rem;
+    border-inline-end-width: 0.125rem;
+  }
+  .accanto-panel[data-accanto-state="info"] {
+    border-inline-start-color: CanvasText;
+  }
+  .accanto-panel[data-accanto-state="sensitive"] {
+    border-inline-start-color: CanvasText;
+    outline-color: CanvasText;
+  }
+  .accanto-panel[data-accanto-state="error"] {
+    border-color: CanvasText;
+  }
+}

@@ -1,0 +1,11 @@
+# Dipendenze (rigenerabili con npm install)
+node_modules/
+
+# Log e cache
+*.log
+.DS_Store
+Thumbs.db
+
+# Segreti: la API key vive in chrome.storage.local, MAI nel repo (INV-1)
+.env
+*.key

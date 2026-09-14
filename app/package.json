@@ -1,0 +1,13 @@
+{
+  "name": "accanto",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Estensione MV3 che spiega i campi di un modulo PA a chi naviga con screen reader e tastiera. Questo package.json serve SOLO agli script di sviluppo: l'estensione NON ha build step.",
+  "scripts": {
+    "serve": "node tools/serve-demo.mjs",
+    "check": "node tools/check-syntax.mjs",
+    "test:l1": "node --test \"tests/l1/**/*.test.mjs\"",
+    "test": "npm run check && npm run test:l1"
+  }
+}

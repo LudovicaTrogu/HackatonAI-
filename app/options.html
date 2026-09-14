@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Accanto — Opzioni (lato team)</title>
+<style>
+  :root {
+    color-scheme: light dark;
+  }
+
+  body {
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+    max-width: 44rem;
+    font-family: system-ui, "Segoe UI", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #111;
+    background: #fff;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .sottotitolo {
+    margin: 0 0 1.5rem;
+    color: #333;
+  }
+
+  .avviso {
+    border: 2px solid #8a4b00;
+    border-left-width: 8px;
+    background: #fff6e8;
+    color: #3d2100;
+    padding: 0.9rem 1rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .avviso h2 {
+    font-size: 1.05rem;
+    margin: 0 0 0.4rem;
+  }
+
+  .avviso p,
+  .avviso ul {
+    margin: 0.4rem 0 0;
+  }
+
+  .avviso ul {
+    padding-left: 1.2rem;
+  }
+
+  .campo {
+    margin: 0 0 1.25rem;
+  }
+
+  label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+
+  .descrizione-campo {
+    margin: 0 0 0.4rem;
+    font-size: 0.9rem;
+    color: #333;
+  }
+
+  input[type="password"],
+  select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-family: inherit;
+    color: #111;
+    background: #fff;
+    border: 2px solid #444;
+    border-radius: 2px;
+  }
+
+  button {
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 700;
+    padding: 0.55rem 1.2rem;
+    color: #fff;
+    background: #12457a;
+    border: 2px solid #12457a;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #0d3157;
+  }
+
+  /* Focus sempre visibile e ad alto contrasto: la pagina deve essere usabile solo da tastiera. */
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  button:focus-visible {
+    outline: 3px solid #a33800;
+    outline-offset: 2px;
+  }
+
+  #stato-salvataggio {
+    margin-top: 1rem;
+    min-height: 1.5rem;
+    font-weight: 700;
+  }
+
+  #stato-salvataggio.ok {
+    color: #0f5132;
+  }
+
+  #stato-salvataggio.errore {
+    color: #8a1c1c;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      color: #f2f2f2;
+      background: #1b1b1b;
+    }
+
+    .sottotitolo,
+    .descrizione-campo {
+      color: #dcdcdc;
+    }
+
+    .avviso {
+      background: #3a2a10;
+      color: #ffe8c7;
+      border-color: #e0a253;
+    }
+
+    input[type="password"],
+    select {
+      color: #f2f2f2;
+      background: #111;
+      border-color: #cfcfcf;
+    }
+
+    button {
+      background: #4a90d9;
+      border-color: #4a90d9;
+      color: #101010;
+    }
+
+    button:hover {
+      background: #72abe4;
+    }
+
+    #stato-salvataggio.ok {
+      color: #8ce0b0;
+    }
+
+    #stato-salvataggio.errore {
+      color: #ff9f9f;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>Accanto — Opzioni</h1>
+<p class="sottotitolo">
+  Configurazione tecnica <strong>lato team</strong>, da compilare prima della demo.
+  Non fa parte del percorso della persona che usa l'estensione.
+</p>
+
+<section class="avviso" aria-labelledby="titolo-avviso">
+  <h2 id="titolo-avviso">Il contenuto del campo viene inviato a un servizio AI esterno</h2>
+  <p>
+    Quando viene richiesta una spiegazione, il contesto del campo attivo del modulo
+    (etichetta, testo di aiuto, placeholder, tipo di campo) viene inviato al provider AI
+    selezionato qui sotto, cioè a un servizio di terze parti fuori da questo computer.
+  </p>
+  <ul>
+    <li>I campi password e i campi di pagamento non vengono mai letti né inviati.</li>
+    <li>Usa il modulo di demo con dati sintetici: nessun dato personale reale.</li>
+    <li>La chiave viene salvata solo in questo browser e usata solo dal service worker dell'estensione.</li>
+  </ul>
+</section>
+
+<form id="form-opzioni" novalidate>
+
+  <div class="campo">
+    <label for="api-key">Chiave API del provider</label>
+    <p class="descrizione-campo" id="descrizione-api-key">
+      Incollala qui. Resta nascosta a schermo e viene salvata solo in questo browser.
+      Esempio fittizio del formato: <code>sk-XXXX-esempio-non-valido</code>.
+    </p>
+    <input
+      type="password"
+      id="api-key"
+      name="api-key"
+      autocomplete="off"
+      spellcheck="false"
+      aria-describedby="descrizione-api-key"
+      placeholder="Incolla qui la chiave API">
+  </div>
+
+  <div class="campo">
+    <label for="provider">Provider AI</label>
+    <p class="descrizione-campo" id="descrizione-provider">
+      Servizio a cui verrà chiesta la spiegazione del campo.
+    </p>
+    <select id="provider" name="provider" aria-describedby="descrizione-provider">
+      <option value="anthropic">Anthropic</option>
+      <option value="openai">OpenAI</option>
+    </select>
+  </div>
+
+  <button type="submit" id="salva">Salva impostazioni</button>
+
+  <p id="stato-salvataggio" role="status" aria-live="polite"></p>
+
+</form>
+
+<script src="options.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fixture 2 · ricerca e lista — announce-aria-live</title>
+  <!--
+    PAGINA DI PROVA 2 (struttura DOM diversa dalla 1: barra di ricerca + lista di risultati,
+    nessun <form> multi-campo). GENERICA: nessun aggancio ad Accanto.
+    Prova manuale del non-furto di focus:
+      1. Metti il focus nella casella di ricerca e scrivi qualcosa.
+      2. Premi Invio: il numero di risultati viene ANNUNCIATO in modo assertivo dalla regione
+         live e uno screen reader lo legge. Il focus RESTA nella casella di ricerca.
+      3. Premi Esc: la regione si svuota. Il focus non si sposta.
+    Qui la politeness è "assertive" (role=alert) per mostrare l'altro ramo dell'API:
+    announce(text, { politeness: "assertive" }).
+  -->
+  <style>
+    body { font: 1rem/1.5 system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; color: #111; background: #fff; }
+    h1 { font-size: 1.4rem; }
+    .search { display: flex; gap: 0.5rem; margin: 1rem 0; }
+    #q { flex: 1; font-size: 1rem; padding: 0.4rem; }
+    ul { padding-left: 1.2rem; }
+    kbd { background: #222; color: #fff; border-radius: 0.25rem; padding: 0 0.35rem; font-family: monospace; }
+    .status-box { margin-top: 1.5rem; padding: 0.5rem; border: 0.125rem dashed #555; }
+    /* Regione live con id personalizzato: dimostra l'opzione regionId di createAnnouncer. */
+    #ricerca-annunci { margin-top: 1rem; padding: 0.75rem; border: 0.1875rem solid #300; background: #fee; color: #300; }
+    #ricerca-annunci[hidden] { display: none; }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <h1>Cerca nel catalogo (fixture 2)</h1>
+  <p>Scrivi nella casella e premi <kbd>Invio</kbd>: il numero di risultati viene annunciato. <kbd>Esc</kbd> chiude.</p>
+
+  <div class="search">
+    <label for="q" class="visually-hidden" style="position:absolute;left:-9999px;">Cerca</label>
+    <input id="q" type="search" placeholder="Cerca un servizio..." autocomplete="off">
+    <button id="go" type="button">Cerca</button>
+  </div>
+
+  <ul id="risultati">
+    <li>Prenotazione appuntamento</li>
+    <li>Richiesta certificato</li>
+    <li>Stato della pratica</li>
+  </ul>
+
+  <p class="status-box">Focus attuale: <strong id="focus-spy">(nessuno)</strong></p>
+
+  <script type="module">
+    // Usa createAnnouncer per mostrare l'opzione regionId (regione live dedicata a questa pagina).
+    import { createAnnouncer } from "../announce-aria-live.js";
+    const announcer = createAnnouncer({ regionId: "ricerca-annunci", regionClassName: "ricerca-annunci" });
+
+    const spy = document.getElementById("focus-spy");
+    function updateSpy() {
+      const el = document.activeElement;
+      spy.textContent = el && el.id ? "#" + el.id : (el ? el.tagName : "(nessuno)");
+    }
+    document.addEventListener("focusin", updateSpy);
+    updateSpy();
+
+    const q = document.getElementById("q");
+    const items = document.querySelectorAll("#risultati li").length;
+
+    function doSearch() {
+      const term = q.value.trim();
+      const before = document.activeElement;
+      const msg = term
+        ? term + ": " + items + " risultati trovati."
+        : "Digita un termine di ricerca.";
+      // Annuncio assertivo: role=alert. Il focus NON viene spostato dalla skill.
+      announcer.announce(msg, { politeness: "assertive" });
+      updateSpy();
+      console.log("[fixture-2] focus invariato dopo announce:", before === document.activeElement);
+    }
+
+    q.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") { event.preventDefault(); doSearch(); }
+    });
+    document.getElementById("go").addEventListener("click", doSearch);
+  </script>
+</body>
+</html>

@@ -7,7 +7,7 @@ date: 2026-09-14
 
 # Persona & Barriera
 
-> Deliverable 1 del tema "Accessibilità Digitale". Riusa la persona e la barriera già definite in [VISION.md](../VISION.md#1-persona--barriera-deliverable-1); qui l'ancoraggio è al modulo di demo reale (`demo/index.html`), con il momento del blocco descritto su un campo specifico, non in generale.
+> Deliverable 1 del tema "Accessibilità Digitale". Riusa la persona e la barriera già definite in [VISION.md](VISION.md#1-persona--barriera-deliverable-1); qui l'ancoraggio è al modulo di demo reale (`demo/index.html`), con il momento del blocco descritto su un campo specifico, non in generale.
 
 ## Chi è Marco
 

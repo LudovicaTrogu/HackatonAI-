@@ -1,0 +1,10 @@
+{
+  "name": "accanto-tests-l2",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Dipendenze SOLO di test per TK-008.2 (L2 DOM fixture). Isolate qui dentro per non toccare il package.json di root: NON sono dipendenze runtime dell'estensione (INV-8 riguarda il runtime). jsdom serve a caricare demo/index.html ed eseguire content.js/lib/context.js con semantica DOM reale (CSS.escape, cloneNode, closest, querySelector, activeElement/focus, KeyboardEvent, import() dinamico).",
+  "dependencies": {
+    "jsdom": "^30.0.1"
+  }
+}

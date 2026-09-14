@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--
+  Fixture 2 per la skill extract-field-context — dominio GENERICO (login applicazione web),
+  NON legato al modulo PA/Accanto. Solo dati sintetici.
+  Copre: label implicita (<label>testo <input></label>), aria-label, aria-labelledby,
+  e un campo type="password" che DEVE risultare isSensitive.
+-->
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <title>Accesso - fixture generica</title>
+  </head>
+  <body>
+    <h1 id="formTitle">Accedi al tuo spazio</h1>
+    <form>
+      <p>
+        <!-- Etichetta implicita: il testo è dentro la stessa <label> dell'input -->
+        <label>Indirizzo email
+          <input name="email" type="email" placeholder="nome@esempio.it" />
+        </label>
+      </p>
+
+      <p>
+        <!-- Etichetta via aria-labelledby (riusa il titolo + un'etichetta dedicata) -->
+        <span id="userLabel">Nome utente</span>
+        <input name="username" type="text" aria-labelledby="formTitle userLabel"
+               aria-describedby="usernameHint" />
+        <span id="usernameHint">Il nome scelto in fase di registrazione.</span>
+      </p>
+
+      <p>
+        <!-- Campo sensibile: type=password -> isSensitive, nessun testo restituito -->
+        <input name="password" type="password" aria-label="Password"
+               placeholder="La tua password" />
+      </p>
+    </form>
+  </body>
+</html>

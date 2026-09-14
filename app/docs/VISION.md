@@ -49,7 +49,7 @@ Il suggerimento è **su richiesta esplicita**, mai automatico a ogni cambio di c
 - **Output accessibile:** regione ARIA live, nessun furto di focus, chiudibile con Esc.
 - **Onboarding tecnico (API key / provider):** configurato **dal team** nelle opzioni dell'estensione, **prima** della demo. Non fa parte del percorso di Marco.
 
-Dettagli implementativi e vincoli per lo sviluppo agentico: vedi [CLAUDE.md](CLAUDE.md). Motivazioni della scelta: vedi [docs/DR-001-decisione-scope-architettura.md](docs/DR-001-decisione-scope-architettura.md).
+Dettagli implementativi e vincoli per lo sviluppo agentico: vedi [CLAUDE.md](../../CLAUDE.md). Motivazioni della scelta: vedi [DR-001-decisione-scope-architettura.md](DR-001-decisione-scope-architettura.md).
 
 ## 5. Perimetro delle 4 ore
 

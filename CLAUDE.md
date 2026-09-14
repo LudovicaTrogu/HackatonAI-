@@ -1,6 +1,6 @@
 # CLAUDE.md — Accanto
 
-Guida per lo sviluppo agentico di questo progetto. Leggi anche [VISION.md](VISION.md) per il perché.
+Guida per lo sviluppo agentico di questo progetto. Leggi anche [VISION.md](app/docs/VISION.md) per il perché.
 
 ## Documenti di progetto (indice — leggi prima di aprire i file sotto)
 
@@ -8,21 +8,21 @@ Solo questo file (`CLAUDE.md`) viene caricato automaticamente in ogni sessione. 
 
 | Percorso | Tipo | Quando leggerlo |
 |---|---|---|
-| [VISION.md](VISION.md) | visione | Prima di modificare persona, scope, o il perimetro delle 4 ore. |
-| [docs/DR-001-decisione-scope-architettura.md](docs/DR-001-decisione-scope-architettura.md) | decisione | Se serve capire perché l'architettura è MV3 + tab-focus + trigger esplicito (canonica, non ridiscutere — INV-10). |
-| [docs/DR-002-decisione-flotta-agenti.md](docs/DR-002-decisione-flotta-agenti.md) | decisione | Prima di cambiare la struttura della flotta di agenti/skill o il perimetro di un task. |
-| [docs/DR-002-taskboard.md](docs/DR-002-taskboard.md) | taskboard | Prima di eseguire un task della flotta: contiene il BLOCCO-CONTESTO da anteporre ai prompt dei subagenti. |
-| [docs/DR-002-execution-index.md](docs/DR-002-execution-index.md) | log-operativo | **Prima di iniziare qualunque task**: fonte di verità sullo stato dei task e sulle dipendenze DONE/BLOCKED. |
-| [docs/DR-003-modello-documentale.md](docs/DR-003-modello-documentale.md) | decisione | Se vuoi capire perché questo indice esiste e come mantenerlo. |
-| [docs/action-log.md](docs/action-log.md) | log-operativo | Prima di iniziare il codice: contiene le decisioni G0 (modulo di demo, campi target, dominio). |
-| [docs/RUNBOOK.md](docs/RUNBOOK.md) | runbook | Per far girare la demo: servire localhost, caricare l'estensione, configurare la key, eseguire il giro. |
-| [docs/demo-script.md](docs/demo-script.md) | scaletta | Coreografia della demo live before/after (distinta dal deliverable TK-009.2). |
-| [docs/deliverable-1-persona-barriera.md](docs/deliverable-1-persona-barriera.md) | deliverable | Deliverable 1 del tema (TK-009.1): persona Marco e momento esatto del blocco ancorati al modulo demo. |
-| [docs/deliverable-2-percorso-assistito.md](docs/deliverable-2-percorso-assistito.md) | deliverable | Deliverable 2 del tema (TK-009.2): before/after sullo stesso campo/persona del Deliverable 1. |
+| [VISION.md](app/docs/VISION.md) | visione | Prima di modificare persona, scope, o il perimetro delle 4 ore. |
+| [docs/DR-001-decisione-scope-architettura.md](app/docs/DR-001-decisione-scope-architettura.md) | decisione | Se serve capire perché l'architettura è MV3 + tab-focus + trigger esplicito (canonica, non ridiscutere — INV-10). |
+| [docs/DR-002-decisione-flotta-agenti.md](app/docs/DR-002-decisione-flotta-agenti.md) | decisione | Prima di cambiare la struttura della flotta di agenti/skill o il perimetro di un task. |
+| [docs/DR-002-taskboard.md](app/docs/DR-002-taskboard.md) | taskboard | Prima di eseguire un task della flotta: contiene il BLOCCO-CONTESTO da anteporre ai prompt dei subagenti. |
+| [docs/DR-002-execution-index.md](app/docs/DR-002-execution-index.md) | log-operativo | **Prima di iniziare qualunque task**: fonte di verità sullo stato dei task e sulle dipendenze DONE/BLOCKED. |
+| [docs/DR-003-modello-documentale.md](app/docs/DR-003-modello-documentale.md) | decisione | Se vuoi capire perché questo indice esiste e come mantenerlo. |
+| [docs/action-log.md](app/docs/action-log.md) | log-operativo | Prima di iniziare il codice: contiene le decisioni G0 (modulo di demo, campi target, dominio). |
+| [docs/RUNBOOK.md](app/docs/RUNBOOK.md) | runbook | Per far girare la demo: servire localhost, caricare l'estensione, configurare la key, eseguire il giro. |
+| [docs/demo-script.md](app/docs/demo-script.md) | scaletta | Coreografia della demo live before/after (distinta dal deliverable TK-009.2). |
+| [docs/deliverable-1-persona-barriera.md](app/docs/deliverable-1-persona-barriera.md) | deliverable | Deliverable 1 del tema (TK-009.1): persona Marco e momento esatto del blocco ancorati al modulo demo. |
+| [docs/deliverable-2-percorso-assistito.md](app/docs/deliverable-2-percorso-assistito.md) | deliverable | Deliverable 2 del tema (TK-009.2): before/after sullo stesso campo/persona del Deliverable 1. |
 
-**Regola di manutenzione (a costo zero, non facoltativa):** chi crea o modifica un documento in `docs/` aggiunge o aggiorna la riga corrispondente in questa tabella nello stesso commit. Senza questa riga il documento resta invisibile a una sessione futura, esattamente come è successo a `DR-002-decisione-flotta-agenti.md` e `DR-002-taskboard.md` prima di DR-003.
+**Regola di manutenzione (a costo zero, non facoltativa):** chi crea o modifica un documento in `app/docs/` aggiunge o aggiorna la riga corrispondente in questa tabella nello stesso commit. Senza questa riga il documento resta invisibile a una sessione futura, esattamente come è successo a `DR-002-decisione-flotta-agenti.md` e `DR-002-taskboard.md` prima di DR-003.
 
-**Rimandato (livello 2, non ancora costruito):** un controllo automatico che segnali un file in `docs/` assente da questa tabella. Formalizzare se questo pattern si ripete su un secondo progetto oltre Accanto.
+**Rimandato (livello 2, non ancora costruito):** un controllo automatico che segnali un file in `app/docs/` assente da questa tabella. Formalizzare se questo pattern si ripete su un secondo progetto oltre Accanto.
 
 **Re-audit:** ogni volta che una nuova decisione DR-* viene ratificata, ricontrolla che la sezione "Vincoli non negoziabili" sotto sia ancora coerente con essa e che nessuna riga di questa tabella si sia trasformata in un sommario normativo (deve restare un puntatore).
 
@@ -48,8 +48,12 @@ Il tool serve un utente di screen reader. **L'output del tool deve quindi essere
 - **Manifest V3**, target Chrome/Edge.
 - **Nessun build step, nessun framework, nessun bundler.** HTML + CSS + JavaScript (ES modules) puro. Questo è deliberato: massimizza la probabilità di caricare l'estensione e vederla girare senza tempo perso in tooling. *(INV-8)*
 - Nessuna dipendenza npm se evitabile. Se serve una libreria, giustificalo. *(INV-8)*
+- **Il `package.json` nella radice NON è un build step e non contraddice INV-8.** Ha zero dipendenze (nessun `node_modules`, nessun `npm install` richiesto) e serve solo a esporre due script di sviluppo scritti con i soli moduli nativi di Node: `npm run serve` (serve `demo/` su `http://localhost:8080`, perché il content script non viene iniettato su `file://`) e `npm run check` (`node --check` su tutti i sorgenti). L'estensione si carica unpacked esattamente com'è, senza compilare nulla. Non aggiungere dipendenze qui senza giustificarle.
+- **Node.js c'è: v22.22.2, gestito da `fnm`.** Non cercarlo in `Program Files`/`nvm`/`AppData\Roaming`: `fnm` lo espone da `AppData\Local\fnm_multishells\<pid>\node.exe`, una directory diversa a ogni sessione. Cinque task sono stati chiusi con la nota "node non disponibile" per questo motivo, ed era un falso negativo. Usa `npm run check`, non una ricerca manuale dei path.
 
 ## Struttura dei file (proposta)
+
+Il codice dell'estensione e i suoi documenti vivono sotto `app/` (i percorsi qui sotto sono relativi ad `app/`). La struttura agentica (skill riutilizzabili) sta in `agents/`; la presentazione in `presentation/`. Vedi il [README](README.md) in radice.
 
 ```
 manifest.json          # MV3: permessi, command (scorciatoia), service worker, content script
@@ -65,7 +69,7 @@ demo/                  # copia statica/mock del modulo PA per la demo (dati sint
 
 ## Confini di sicurezza (non negoziabili)
 
-Questi vincoli, più INV-7 (sopra, in "Regola numero uno") e INV-8 (sopra, in "Stack e vincoli tecnici"), sono la fonte unica degli ID INV-1..INV-10. [docs/DR-002-decisione-flotta-agenti.md](docs/DR-002-decisione-flotta-agenti.md) li referenzia per ID e non li ridefinisce: se un giorno divergono, questo file vince.
+Questi vincoli, più INV-7 (sopra, in "Regola numero uno") e INV-8 (sopra, in "Stack e vincoli tecnici"), sono la fonte unica degli ID INV-1..INV-10. [docs/DR-002-decisione-flotta-agenti.md](app/docs/DR-002-decisione-flotta-agenti.md) li referenzia per ID e non li ridefinisce: se un giorno divergono, questo file vince.
 
 - La **API key** vive in `chrome.storage.local` e viene usata **solo nel service worker** (`background.js`). Non deve mai finire in `content.js` né nel contesto della pagina. *(INV-1)*
 - La chiamata `fetch` all'LLM parte dal **service worker**, non dal content script. *(INV-2)*
@@ -75,7 +79,7 @@ Questi vincoli, più INV-7 (sopra, in "Regola numero uno") e INV-8 (sopra, in "S
 - Il suggerimento è sempre informativo — l'estensione **non compila e non invia mai** campi da sola. *(INV-6)*
 - Mostra un avviso sintetico che il contenuto del campo viene inviato a un servizio AI esterno. *(requisito aggiuntivo di questo file, non in DR-002)*
 - Nella demo usa **solo dati sintetici**. Mai dati personali reali del team. *(INV-9)*
-- Le decisioni [DR-001](docs/DR-001-decisione-scope-architettura.md) e [DR-002](docs/DR-002-decisione-flotta-agenti.md) sono canoniche: non ridiscuterle nel merito durante l'implementazione. *(INV-10)*
+- Le decisioni [DR-001](app/docs/DR-001-decisione-scope-architettura.md) e [DR-002](app/docs/DR-002-decisione-flotta-agenti.md) sono canoniche: non ridiscuterle nel merito durante l'implementazione. *(INV-10)*
 
 ## Affidabilità della demo
 

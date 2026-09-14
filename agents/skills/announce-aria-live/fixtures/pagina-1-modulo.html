@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fixture 1 · modulo di contatto — announce-aria-live</title>
+  <!--
+    PAGINA DI PROVA 1 (struttura DOM: form con più campi).
+    GENERICA: nessun aggancio ad Accanto. Usa solo la skill announce-aria-live.
+    Prova manuale del non-furto di focus:
+      1. Clicca (o Tab) nel campo "Nome" e inizia a scrivere.
+      2. Premi Alt+A: compare l'annuncio nella regione live in fondo alla pagina e uno
+         screen reader lo legge da solo.
+      3. Il cursore RESTA nel campo "Nome": continua a scrivere per verificarlo. Il box
+         "Focus attuale" mostra sempre lo stesso campo prima e dopo l'annuncio.
+      4. Premi Esc: la regione si svuota. Il focus non si sposta.
+  -->
+  <style>
+    body { font: 1rem/1.5 system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; color: #111; background: #fff; }
+    h1 { font-size: 1.4rem; }
+    label { display: block; font-weight: 700; margin-top: 1rem; }
+    input, textarea { font-size: 1rem; width: 100%; padding: 0.4rem; box-sizing: border-box; }
+    .hint { color: #333; font-size: 0.9rem; }
+    kbd { background: #222; color: #fff; border-radius: 0.25rem; padding: 0 0.35rem; font-family: monospace; }
+    .status-box { margin-top: 1.5rem; padding: 0.5rem; border: 0.125rem dashed #555; }
+    /* Stile minimo, ad alto contrasto, della regione live. */
+    #aria-live-announcer { margin-top: 1rem; padding: 0.75rem; border: 0.1875rem solid #003; background: #eef; color: #003; }
+    #aria-live-announcer[hidden] { display: none; }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <h1>Modulo di contatto (fixture 1)</h1>
+  <p>Metti il focus in un campo, premi <kbd>Alt</kbd>+<kbd>A</kbd> per un annuncio, <kbd>Esc</kbd> per chiuderlo.</p>
+
+  <form id="contatto" novalidate>
+    <label for="nome">Nome</label>
+    <input id="nome" name="nome" type="text" autocomplete="off">
+
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" autocomplete="off">
+    <p class="hint" id="email-hint">Useremo l'email solo per risponderti.</p>
+
+    <label for="messaggio">Messaggio</label>
+    <textarea id="messaggio" name="messaggio" rows="4"></textarea>
+  </form>
+
+  <p class="status-box">Focus attuale: <strong id="focus-spy">(nessuno)</strong></p>
+
+  <script type="module">
+    import { announce, clear } from "../announce-aria-live.js";
+
+    // Spia del focus (solo per la prova visiva; la skill non ne ha bisogno).
+    const spy = document.getElementById("focus-spy");
+    function updateSpy() {
+      const el = document.activeElement;
+      spy.textContent = el && el.id ? "#" + el.id : (el ? el.tagName : "(nessuno)");
+    }
+    document.addEventListener("focusin", updateSpy);
+    updateSpy();
+
+    document.addEventListener("keydown", (event) => {
+      // Alt+A: annuncio contestuale al campo attivo (senza spostare il focus).
+      if (event.altKey && (event.key === "a" || event.key === "A")) {
+        event.preventDefault();
+        const el = document.activeElement;
+        const label = el && el.id
+          ? "Sei nel campo " + el.id + ". Questo è un annuncio di prova via regione ARIA live."
+          : "Nessun campo selezionato: usa Tab per scegliere un campo, poi Alt+A.";
+        const before = document.activeElement;
+        announce(label, { politeness: "polite" });
+        updateSpy();
+        // Prova esplicita in console: il focus non è cambiato.
+        console.log("[fixture-1] focus invariato dopo announce:", before === document.activeElement);
+      }
+      // Esc gestito anche dalla skill; qui aggiorniamo solo la spia.
+      if (event.key === "Escape") { setTimeout(updateSpy, 0); }
+    });
+  </script>
+</body>
+</html>

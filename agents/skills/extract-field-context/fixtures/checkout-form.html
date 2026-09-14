@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--
+  Fixture 1 per la skill extract-field-context — dominio GENERICO (checkout e-commerce),
+  NON legato al modulo PA/Accanto. Solo dati sintetici.
+  Copre: label via <label for>, hint via aria-describedby, placeholder, <select>,
+  e un campo di pagamento (autocomplete="cc-number") che DEVE risultare isSensitive.
+-->
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <title>Checkout - fixture generica</title>
+  </head>
+  <body>
+    <h1>Pagamento ordine</h1>
+    <form>
+      <p>
+        <label for="fullName">Nome sul citofono di consegna</label>
+        <input id="fullName" name="fullName" type="text" placeholder="Es. Mario Rossi" />
+        <span id="fullNameHint">Serve al corriere per trovarti al piano.</span>
+      </p>
+
+      <p>
+        <label for="shippingSpeed">Velocità di spedizione</label>
+        <select id="shippingSpeed" name="shippingSpeed" aria-describedby="shippingSpeedHint">
+          <option value="standard">Standard</option>
+          <option value="express">Express</option>
+        </select>
+        <span id="shippingSpeedHint">Express arriva entro 24 ore nei giorni feriali.</span>
+      </p>
+
+      <p>
+        <label for="cardNumber">Numero carta</label>
+        <input id="cardNumber" name="cardNumber" type="text" autocomplete="cc-number"
+               placeholder="0000 0000 0000 0000" />
+        <span id="cardNumberHint">Le 16 cifre stampate sul fronte della carta.</span>
+      </p>
+    </form>
+  </body>
+</html>

@@ -7,13 +7,13 @@ date: 2026-09-14
 
 # Percorso Assistito — prima e dopo Accanto
 
-> Deliverable 2 del tema "Accessibilità Digitale". Riusa il percorso già definito in [VISION.md](../VISION.md#2-percorso-assistito-deliverable-2); qui il confronto before/after è ancorato allo **stesso campo e alla stessa persona** del Deliverable 1 ([deliverable-1-persona-barriera.md](deliverable-1-persona-barriera.md)): Marco su `#classe-invalidita` nel modulo `demo/index.html`.
+> Deliverable 2 del tema "Accessibilità Digitale". Riusa il percorso già definito in [VISION.md](VISION.md#2-percorso-assistito-deliverable-2); qui il confronto before/after è ancorato allo **stesso campo e alla stessa persona** del Deliverable 1 ([deliverable-1-persona-barriera.md](deliverable-1-persona-barriera.md)): Marco su `#classe-invalidita` nel modulo `demo/index.html`.
 
 ## Nota sullo stato dell'implementazione
 
 Il blocco "Prima" descrive un comportamento **osservabile oggi** in `demo/index.html` (nessuna estensione caricata: il campo espone solo etichetta + hint via `aria-describedby`, letti dallo screen reader).
 
-Il blocco "Dopo" descrive il comportamento **di progetto**, vincolato dai contratti già congelati nel repo — `manifest.json` (comando `spiega-campo`, scorciatoia `Alt+Shift+A`), `lib/messages.js` (contratto richiesta/risposta `ACCANTO_EXPLAIN`) e gli invarianti INV-1..INV-10 in [CLAUDE.md](../CLAUDE.md) — non ancora un giro end-to-end verificato: `content.js`, `background.js` e `lib/fallback.js` sono a questa data placeholder (TK-002.3 WIP; TK-003.x/TK-004.x TODO in [DR-002-execution-index.md](DR-002-execution-index.md)). La verifica reale con screen reader del giro completo è il gate TK-014, ancora da eseguire. Questo documento non afferma di aver osservato il "dopo" in esecuzione; lo specifica come contratto vincolante per l'implementazione.
+Il blocco "Dopo" descrive il comportamento **di progetto**, vincolato dai contratti già congelati nel repo — `manifest.json` (comando `spiega-campo`, scorciatoia `Alt+Shift+A`), `lib/messages.js` (contratto richiesta/risposta `ACCANTO_EXPLAIN`) e gli invarianti INV-1..INV-10 in [CLAUDE.md](../../CLAUDE.md) — non ancora un giro end-to-end verificato: `content.js`, `background.js` e `lib/fallback.js` sono a questa data placeholder (TK-002.3 WIP; TK-003.x/TK-004.x TODO in [DR-002-execution-index.md](DR-002-execution-index.md)). La verifica reale con screen reader del giro completo è il gate TK-014, ancora da eseguire. Questo documento non afferma di aver osservato il "dopo" in esecuzione; lo specifica come contratto vincolante per l'implementazione.
 
 ## Prima (senza Accanto) — osservato
 
@@ -46,4 +46,4 @@ Il campo ha un hint associato via `aria-describedby` (`hint-classe-invalidita`: 
 
 ## Perché è lo stesso confronto, non due scenari diversi
 
-Il "prima" e il "dopo" condividono campo (`#classe-invalidita`), persona (Marco) e modulo (`demo/index.html`): l'unica variabile è la presenza di Accanto. Questo è il confronto richiesto per la demo dal vivo (vedi [docs/demo-script.md](demo-script.md)) e per la misura di successo in [VISION.md §7](../VISION.md#7-come-si-misura-il-successo-in-demo).
+Il "prima" e il "dopo" condividono campo (`#classe-invalidita`), persona (Marco) e modulo (`demo/index.html`): l'unica variabile è la presenza di Accanto. Questo è il confronto richiesto per la demo dal vivo (vedi [docs/demo-script.md](demo-script.md)) e per la misura di successo in [VISION.md §7](VISION.md#7-come-si-misura-il-successo-in-demo).
