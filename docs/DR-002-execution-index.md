@@ -28,10 +28,10 @@ Stati: `TODO` · `WIP` · `BLOCKED` · `DONE` · `SKIP`.
 |---|---|---|---|---|---|---|---|
 | TK-001.1 | G0 · Decisione modulo/campi/dominio | — | human | — | DONE | docs/action-log.md | 2026-09-14 |
 | TK-001.2 | G0 · Scaffold demo/index.html | — | agent | TK-001.1 | DONE | demo/index.html: 3 campi target etichettati (label+aria-describedby) + 1 campo sensibile (password) come caso negativo INV-4 | 2026-09-14 |
-| TK-001.3 | G0 · Verifica DOM semantico | — | human | TK-001.2 | TODO | | |
-| TK-002.1 | S1 · Contratto lib/messages.js | A | agent | TK-001.1 | TODO | | |
-| TK-002.2 | S1 · manifest.json | A | agent | TK-002.1 | TODO | | |
-| TK-002.3 | S1 · Placeholder + load-check | A | agent | TK-002.2 | TODO | | |
+| TK-001.3 | G0 · Verifica DOM semantico | — | human | TK-001.2 | DONE | Confermato da Alessandro Musio: demo/index.html verificato nel browser, label/aria-describedby corretti | 2026-09-14 |
+| TK-002.1 | S1 · Contratto lib/messages.js | A | agent | TK-001.1 | DONE | lib/messages.js: ACCANTO_EXPLAIN + createExplainRequest/Success/Error + JSDoc FieldContext | 2026-09-14 |
+| TK-002.2 | S1 · manifest.json | A | agent | TK-002.1 | DONE | manifest.json creato, JSON validato (node -e JSON.parse); host_permissions/content_scripts ristretti a http://localhost/* (INV-3); nessuna <all_urls> | 2026-09-14 |
+| TK-002.3 | S1 · Placeholder + load-check | A | agent | TK-002.2 | WIP | Placeholder creati (background.js, content.js, content.css, lib/context.js, lib/prompt.js, lib/fallback.js, options.html, options.js). Manca il load-check umano in chrome://extensions (carica senza errori, scorciatoia Alt+Shift+A registrata in chrome://extensions/shortcuts) | 2026-09-14 |
 | TK-003.1 | S2 · lib/prompt.js | A | agent | TK-002.1 | TODO | | |
 | TK-003.2 | S2 · options.html + options.js | A | agent | TK-002.2 | TODO | | |
 | TK-003.3 | S2 · background.js (fallback-first) | A | agent | TK-002.1, TK-003.1 | TODO | | |
@@ -92,3 +92,6 @@ Stati: `TODO` · `WIP` · `BLOCKED` · `DONE` · `SKIP`.
 | 2026-09-14 | — | INIT | Indice creato da DR-002; tutti i task TODO. |
 | 2026-09-14 | TK-001.1 | DONE | Modulo scelto: invalidità civile stile INPS; campi target e dominio (http://localhost) registrati in docs/action-log.md. |
 | 2026-09-14 | TK-001.2 | DONE | demo/index.html creato con i 3 campi target (#classe-invalidita, #impegnativa, #esenzione-ticket) e il campo sensibile #pin-area-riservata. In attesa di TK-001.3 (verifica umana DevTools). |
+| 2026-09-14 | TK-001.3 | DONE | Verifica umana confermata: label/aria-describedby corretti sui campi target. TK-001 chiuso, sblocca TK-002. |
+| 2026-09-14 | TK-002.1/.2 | DONE | Contratto messaggi (lib/messages.js) e manifest.json creati; host_permissions/content_scripts ristretti a http://localhost/*, nessuna <all_urls> (INV-3). |
+| 2026-09-14 | TK-002.3 | WIP | Placeholder di tutti i file segnaposto creati (background.js, content.js, content.css, lib/context.js, lib/prompt.js, lib/fallback.js, options.html, options.js). Manca il load-check umano in chrome://extensions. |

@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Accanto",
+  "version": "0.1.0",
+  "description": "Spiega in parole semplici il campo di un modulo online, senza spostare il focus, per chi naviga con screen reader e tastiera.",
+  "permissions": ["storage"],
+  "host_permissions": ["http://localhost/*"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://localhost/*"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  "commands": {
+    "spiega-campo": {
+      "suggested_key": {
+        "default": "Alt+Shift+A"
+      },
+      "description": "Spiega il campo attivo (Accanto)"
+    }
+  },
+  "options_page": "options.html"
+}
