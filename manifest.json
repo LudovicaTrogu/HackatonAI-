@@ -16,6 +16,12 @@
       "css": ["content.css"]
     }
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["lib/messages.js", "lib/context.js"],
+      "matches": ["http://localhost/*"]
+    }
+  ],
   "commands": {
     "spiega-campo": {
       "suggested_key": {
