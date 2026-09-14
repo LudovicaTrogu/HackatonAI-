@@ -99,6 +99,8 @@ REGOLE DI ESECUZIONE:
 | TK-012 | Skill announce-aria-live | B | agent | TK-004.2 | skills/ | S |
 | TK-013 | Skill test-annuncio-screen-reader | B | agent | TK-008.x | skills/ | S |
 | TK-014 | G-SR · Test screen reader reale | — | human | build integrata | — | S |
+| TK-015 | Runbook/README della demo | — | either | TK-001, TK-002.2 (DONE) | docs/RUNBOOK.md | S |
+| TK-016 | Script della demo live | — | either | demo osservabile (G0 DONE) | docs/demo-script.md | S |
 
 Percorso critico demo-safe: **TK-001.x → TK-002.x → (TK-003.x + TK-005.1 ‖ TK-004.x) → TK-006**.
 
@@ -432,3 +434,47 @@ depends_on: [build integrata] ; size: S ; executor: human
 Checklist (~15-20 min, non comprimibile): NVDA o `Win+Ctrl+Invio` (Narrator); schermo spento; per ogni
 campo target: Tab → scorciatoia → l'annuncio viene letto? → Tab → il focus era rimasto? → Esc → chiude
 pulito? → comprensibile senza vedere? Difetti → issue (non patch che violino un INV). Aggiorna l'indice.
+
+---
+
+## Fase 2 — Presentazione & operatività (docs/)
+
+### TK-015 · Runbook/README della demo (either) — *anteponi BLOCCO-CONTESTO*
+```yaml
+outcome: docs/RUNBOOK.md che permette a chi non conosce il repo di far girare la demo end-to-end
+acceptance_evidence: una persona nuova, seguendo SOLO il runbook, serve demo/ su http://localhost, carica l'estensione unpacked, configura la API key ed esegue il giro (con fallback rete-safe)
+allowed_scope: [docs/RUNBOOK.md]
+forbidden_scope: [codice; ridiscutere DR-001/DR-002/DR-003]
+depends_on: [TK-001 DONE, TK-002.2 DONE; rifinire dopo G-FASE]
+size: S ; executor: either
+```
+```text
+RUOLO: scrivi SOLO docs/RUNBOOK.md. LEGGI action-log.md (dominio, campi target), manifest.json
+(scorciatoia, host) e l'indice per lo stato. Se un passo dipende da codice non ancora DONE, scrivilo
+come TODO esplicito — non inventare comandi non verificati.
+COMPITO: passo-passo: (1) servire demo/ su http://localhost coerente col dominio del manifest
+(es. `python -m http.server 8080`); (2) caricare l'estensione unpacked in chrome://extensions e
+verificare la scorciatoia Alt+Shift+A; (3) configurare API key + provider dalle opzioni (INV-1: la
+chiave resta lato team/SW); (4) eseguire il giro Tab→scorciatoia→annuncio→Esc; (5) fallback con rete
+OFF. Ricorda: solo dati sintetici (INV-9).
+ACCEPTANCE: vedi sopra. OUTPUT: percorso + TODO su passi bloccati da codice. Aggiorna l'indice + riga in CLAUDE.md (DR-003).
+```
+
+### TK-016 · Script della demo live (either) — *anteponi BLOCCO-CONTESTO*
+```yaml
+outcome: docs/demo-script.md — coreografia eseguibile del before/after per la presentazione
+acceptance_evidence: scaletta che mostra il "prima" (blocco) e il "dopo" (autonomia) su 2-3 campi con screen reader, entro il tempo della demo
+allowed_scope: [docs/demo-script.md]
+forbidden_scope: [codice; duplicare il deliverable TK-009.2 — quello è il documento per i giudici, questo è la scaletta operativa]
+depends_on: [demo osservabile / G0 DONE; rifinire dopo la build]
+size: S ; executor: human/either
+```
+```text
+RUOLO: scrivi SOLO docs/demo-script.md. Base: VISION.md (§7) e action-log (campi target). Distinto da
+TK-009.2: qui è la SCALETTA da recitare, non il documento di consegna.
+COMPITO: setup (schermo spento + NVDA/Narrator, keyboard-only); il "prima" (Marco tabula e si blocca);
+il "dopo" (Alt+Shift+A → annuncio via aria-live → focus fermo → completa); i 2-3 campi scelti; timing;
+chi parla; e la frase esplicita su "dove contribuisce l'AI e dove serve revisione umana" (requisito del
+tema). Stesso campo e stessa persona per il confronto.
+ACCEPTANCE: vedi sopra. OUTPUT: percorso file. Aggiorna l'indice + riga in CLAUDE.md (DR-003).
+```
