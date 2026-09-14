@@ -52,8 +52,8 @@ Stati: `TODO` · `WIP` · `BLOCKED` · `DONE` · `SKIP`.
 | TK-012 | Skill announce-aria-live | B | agent | TK-004.2 | TODO | | |
 | TK-013 | Skill test-annuncio-screen-reader | B | agent | TK-008.1/.2/.3 | TODO | | |
 | TK-014 | G-SR · Test screen reader reale | — | human | build integrata | TODO | | |
-| TK-015 | Runbook/README della demo | — | either | TK-001, TK-002.2 (DONE) | TODO | | |
-| TK-016 | Script della demo live | — | either | demo osservabile (G0 DONE) | TODO | | |
+| TK-015 | Runbook/README della demo | — | either | TK-001, TK-002.2 (DONE) | WIP | presa in carico (sessione coordinamento) | 2026-09-14 |
+| TK-016 | Script della demo live | — | either | demo osservabile (G0 DONE) | WIP | presa in carico (sessione coordinamento) | 2026-09-14 |
 
 ## Mappa file → task owner (un file, un solo owner)
 
@@ -100,3 +100,4 @@ Stati: `TODO` · `WIP` · `BLOCKED` · `DONE` · `SKIP`.
 | 2026-09-14 | TK-002.1/.2 | DONE | Contratto messaggi (lib/messages.js) e manifest.json creati; host_permissions/content_scripts ristretti a http://localhost/*, nessuna <all_urls> (INV-3). |
 | 2026-09-14 | TK-002.3 | WIP | Placeholder di tutti i file segnaposto creati (background.js, content.js, content.css, lib/context.js, lib/prompt.js, lib/fallback.js, options.html, options.js). Manca il load-check umano in chrome://extensions. |
 | 2026-09-14 | TK-015/016 | ADD | Taskificati runbook demo (docs/RUNBOOK.md) e script demo live (docs/demo-script.md); board+indice aggiornati. Lane presentazione/docs, non collide col codice. |
+| 2026-09-14 | TK-015/016 | WIP | Presi in carico da questa sessione (lane docs/presentazione); stesura RUNBOOK.md e demo-script.md. |
