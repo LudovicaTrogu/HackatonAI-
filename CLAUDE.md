@@ -15,6 +15,8 @@ Solo questo file (`CLAUDE.md`) viene caricato automaticamente in ogni sessione. 
 | [docs/DR-002-execution-index.md](docs/DR-002-execution-index.md) | log-operativo | **Prima di iniziare qualunque task**: fonte di verità sullo stato dei task e sulle dipendenze DONE/BLOCKED. |
 | [docs/DR-003-modello-documentale.md](docs/DR-003-modello-documentale.md) | decisione | Se vuoi capire perché questo indice esiste e come mantenerlo. |
 | [docs/action-log.md](docs/action-log.md) | log-operativo | Prima di iniziare il codice: contiene le decisioni G0 (modulo di demo, campi target, dominio). |
+| [docs/RUNBOOK.md](docs/RUNBOOK.md) | runbook | Per far girare la demo: servire localhost, caricare l'estensione, configurare la key, eseguire il giro. |
+| [docs/demo-script.md](docs/demo-script.md) | scaletta | Coreografia della demo live before/after (distinta dal deliverable TK-009.2). |
 
 **Regola di manutenzione (a costo zero, non facoltativa):** chi crea o modifica un documento in `docs/` aggiunge o aggiorna la riga corrispondente in questa tabella nello stesso commit. Senza questa riga il documento resta invisibile a una sessione futura, esattamente come è successo a `DR-002-decisione-flotta-agenti.md` e `DR-002-taskboard.md` prima di DR-003.
 
