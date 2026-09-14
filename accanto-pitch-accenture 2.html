@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<title>Accanto — Pitch | Accenture</title>
+<style>
+  :root{
+    --navy: #000000;
+    --navy-2: #151515;
+    --navy-3: #333333;
+    --cream: #FFFFFF;
+    --muted: #C7C7C7;
+    --accent: #A100FF;
+    --accent-dim: #7500C0;
+    --serif: "Segoe UI", Arial, sans-serif;
+    --sans: "Segoe UI", Arial, sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0; padding:0; height:100%;
+    background: var(--navy);
+    color: var(--cream);
+    font-family: var(--sans);
+    overflow: hidden;
+  }
+
+  .skip-link{
+    position:absolute; left:-9999px; top:0;
+    background: var(--accent); color: var(--navy);
+    padding: 10px 16px; z-index: 999; font-weight:600;
+  }
+  .skip-link:focus{ left: 12px; top: 12px; }
+
+  .deck{
+    position: relative;
+    width: 100vw; height: 100vh;
+  }
+
+  .slide{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 7vh 9vw 12vh 9vw;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px);
+    transition: opacity .38s ease, transform .38s ease;
+  }
+  .slide.active{
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .slide{ transition: opacity .01s linear; transform: none; }
+  }
+
+  .eyebrow{
+    font-family: var(--sans);
+    font-size: clamp(0.85rem, 1.1vw, 1rem);
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.3rem;
+  }
+
+  h1{
+    font-family: var(--serif);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    font-size: clamp(1.55rem, 2.9vw, 2.35rem);
+    line-height: 1.28;
+    max-width: 28ch;
+    margin: 0 0 1rem 0;
+    color: var(--cream);
+  }
+
+  .lede{
+    font-family: var(--sans);
+    font-size: clamp(1rem, 1.35vw, 1.18rem);
+    color: var(--muted);
+    max-width: 58ch;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .accent-text{ color: var(--accent); }
+
+  .visual{
+    margin: 0.4rem 0 1.6rem 0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .visual svg{ display:block; }
+
+  .capability-list{
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.4rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    text-align: left;
+    max-width: 58ch;
+  }
+  .capability-list li{
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    font-size: clamp(0.95rem, 1.25vw, 1.08rem);
+    color: var(--cream);
+    line-height: 1.5;
+  }
+  .capability-list li .mark{
+    flex: none;
+    width: 18px; height: 18px;
+    margin-top: 0.18rem;
+    border-radius: 4px;
+    border: 1.5px solid var(--accent);
+    position: relative;
+  }
+  .capability-list li .mark::after{
+    content: '';
+    position: absolute;
+    left: 4px; top: 1px;
+    width: 5px; height: 9px;
+    border-right: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    transform: rotate(40deg);
+  }
+
+  .not-list{
+    margin: 0.9rem 0 0 0;
+    font-size: 0.92rem;
+    color: var(--muted);
+    max-width: 58ch;
+    line-height: 1.5;
+  }
+
+  /* step layout for slide "come si usa" */
+  .steps{
+    display:flex;
+    gap: 2.6rem;
+    margin: 0.3rem 0 1.5rem 0;
+    flex-wrap: wrap;
+    justify-content:center;
+  }
+  .step{
+    display:flex; flex-direction:column; align-items:center;
+    max-width: 190px;
+  }
+  .step .num{
+    font-family: var(--serif);
+    color: var(--accent);
+    font-size: 0.95rem;
+    margin-bottom: .5rem;
+  }
+  .step .label{
+    font-size: 1rem;
+    color: var(--cream);
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+  .step .sub{
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    line-height: 1.4;
+  }
+  .step-arrow{
+    align-self:center;
+    color: var(--muted);
+    font-size: 1.4rem;
+    margin-top: 0.8rem;
+  }
+
+  /* before / after slide */
+  .compare{
+    display:flex; gap: 2rem; margin: 0.4rem 0 1.4rem 0;
+    flex-wrap: wrap; justify-content:center;
+  }
+  .card{
+    background: var(--navy-2);
+    border: 1px solid var(--navy-3);
+    border-radius: 10px;
+    padding: 1.4rem 1.5rem;
+    width: 300px;
+    text-align: left;
+  }
+  .card.after{
+    border-color: var(--accent-dim);
+    background: linear-gradient(180deg, rgba(240,168,104,0.08), rgba(240,168,104,0.02));
+  }
+  .card .tag{
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+  .card.after .tag{ color: var(--accent); }
+  .card .said{
+    font-family: var(--serif);
+    font-size: 1.08rem;
+    line-height: 1.5;
+    color: var(--cream);
+  }
+
+  footer.bar{
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 64px;
+    display:flex; align-items:center; justify-content:center;
+    gap: 1.2rem;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.35));
+    z-index: 50;
+    pointer-events: none;
+  }
+  .counter{
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    color: var(--muted);
+    background: rgba(18,35,58,0.7);
+    padding: 6px 16px;
+    border-radius: 999px;
+    pointer-events: auto;
+    letter-spacing: 0.02em;
+  }
+  .progress-track{
+    position: fixed;
+    top:0; left:0; right:0; height: 3px;
+    background: transparent;
+    z-index: 60;
+  }
+  .progress-fill{
+    height: 100%;
+    background: var(--accent);
+    transition: width .3s ease;
+  }
+
+  .notes-toggle{
+    position: fixed;
+    top: 18px; right: 18px;
+    z-index: 70;
+    background: var(--navy-2);
+    color: var(--muted);
+    border: 1px solid var(--navy-3);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .notes-toggle:hover, .notes-toggle:focus{ color: var(--cream); border-color: var(--accent); }
+
+  .notes-panel{
+    position: fixed;
+    right: 18px; top: 62px;
+    width: min(380px, 82vw);
+    max-height: 62vh;
+    overflow-y: auto;
+    background: var(--navy-2);
+    border: 1px solid var(--navy-3);
+    border-radius: 10px;
+    padding: 1.1rem 1.2rem;
+    font-family: var(--sans);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--cream);
+    text-align: left;
+    z-index: 70;
+    display: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+  .notes-panel.open{ display:block; }
+  .notes-panel .notes-label{
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display:block;
+  }
+
+  .nav-hint{
+    position: fixed;
+    bottom: 18px; left: 18px;
+    font-size: 0.78rem;
+    color: var(--navy-3);
+    z-index: 50;
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .sr-only{
+    position:absolute; width:1px; height:1px;
+    padding:0; margin:-1px; overflow:hidden;
+    clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
+
+  /* Accenture-inspired branding */
+  .brand-lockup{
+    position: fixed;
+    top: 22px;
+    left: 30px;
+    z-index: 100;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1;
+    user-select: none;
+  }
+  .brand-mark{
+    color: var(--accent);
+    font-family: Arial, sans-serif;
+    font-size: 1.45rem;
+    font-weight: 900;
+    line-height: .55;
+    margin-left: 2.75rem;
+    transform: scaleX(1.25);
+    transform-origin: left center;
+  }
+  .brand-name{
+    color: #FFFFFF;
+    font-family: Arial, sans-serif;
+    font-size: 1.12rem;
+    font-weight: 700;
+    letter-spacing: -0.055em;
+  }
+  .brand-signature{
+    position: fixed;
+    right: 28px;
+    bottom: 22px;
+    z-index: 55;
+    color: #8D8D8D;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .slide::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 7px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--accent), #7500C0 58%, transparent 100%);
+  }
+  .eyebrow{
+    text-transform: uppercase;
+    letter-spacing: .13em;
+    font-weight: 700;
+  }
+  .card{
+    border-radius: 0;
+  }
+  .counter{
+    border: 1px solid #333333;
+    background: rgba(0,0,0,.78);
+  }
+  @media (max-width: 680px){
+    .brand-lockup{ top: 16px; left: 20px; }
+    .brand-signature{ right: 18px; bottom: 16px; }
+  }
+
+
+  /* Frontespizio */
+  .cover-slide{
+    align-items: flex-start;
+    text-align: left;
+    padding-left: 12vw;
+    padding-right: 12vw;
+    overflow: hidden;
+  }
+  .cover-slide::after{
+    content: '>';
+    position: absolute;
+    right: 5vw;
+    bottom: -14vh;
+    color: var(--accent);
+    font-family: Arial, sans-serif;
+    font-size: clamp(18rem, 42vw, 42rem);
+    font-weight: 900;
+    line-height: .75;
+    opacity: .13;
+    transform: scaleX(1.18);
+    transform-origin: right bottom;
+    pointer-events: none;
+  }
+  .cover-kicker{
+    color: var(--accent);
+    font-size: clamp(.78rem, 1vw, .92rem);
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .cover-title{
+    max-width: none;
+    margin: 0;
+    font-size: clamp(4rem, 10vw, 8.5rem);
+    line-height: .86;
+    letter-spacing: -.065em;
+    font-weight: 800;
+    position: relative;
+    z-index: 2;
+  }
+  .cover-title::after{
+    content: '';
+    display: block;
+    width: min(280px, 42vw);
+    height: 8px;
+    margin-top: 1.5rem;
+    background: var(--accent);
+  }
+  .cover-subtitle{
+    max-width: 52ch;
+    margin: 1.5rem 0 0;
+    color: #FFFFFF;
+    font-size: clamp(1.15rem, 2vw, 1.65rem);
+    line-height: 1.4;
+    font-weight: 400;
+    position: relative;
+    z-index: 2;
+  }
+  .cover-meta{
+    margin-top: 2.2rem;
+    color: var(--muted);
+    font-size: clamp(.82rem, 1vw, .98rem);
+    letter-spacing: .03em;
+    position: relative;
+    z-index: 2;
+  }
+  @media (max-width: 680px){
+    .cover-slide{ padding-left: 10vw; padding-right: 10vw; }
+    .cover-title{ font-size: clamp(3.6rem, 18vw, 6rem); }
+    .cover-slide::after{ right: -5vw; bottom: -5vh; }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="brand-lockup" aria-label="Accenture">
+  <span class="brand-mark" aria-hidden="true">&gt;</span>
+  <span class="brand-name">accenture</span>
+</div>
+<div class="brand-signature" aria-hidden="true">Accanto · Accessibility powered by AI</div>
+
+
+<a href="#deck" class="skip-link">Vai al contenuto della presentazione</a>
+
+<div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+<button class="notes-toggle" id="notesToggle" aria-expanded="false" aria-controls="notesPanel">
+  Note relatore (N)
+</button>
+<div class="notes-panel" id="notesPanel" role="region" aria-label="Note per il relatore">
+  <span class="notes-label">Cosa dire</span>
+  <span id="notesText"></span>
+</div>
+
+<main class="deck" id="deck" role="main" aria-live="polite">
+
+
+  <!-- SLIDE 1: Frontespizio -->
+  <section class="slide active cover-slide" data-notes="Accanto è una soluzione di accessibilità basata sull'intelligenza artificiale, progettata per supportare la compilazione autonoma dei moduli digitali. Questa presentazione ne illustra il problema affrontato, il funzionamento e il valore per l'utente.">
+    <div class="cover-kicker">Accessibility powered by AI</div>
+    <h1 class="cover-title">Accanto</h1>
+    <p class="cover-subtitle">L'assistente intelligente che rende più accessibile la compilazione dei moduli digitali.</p>
+    <div class="cover-meta">Pitch concept · Accenture</div>
+  </section>
+  <!-- SLIDE 2: Cosa fa Accanto -->
+  <section class="slide" data-notes="Accanto interviene nel momento preciso in cui un utente si blocca su un campo di un modulo online. Rileva il campo su cui l'utente è fermo, senza interferire con la navigazione in corso. Analizza il contesto: etichetta, tipo di campo, vincoli, eventuali campi correlati nel modulo. Da questi elementi compone una spiegazione mirata su cosa inserire e in che formato, e la restituisce tramite sintesi vocale, nello stesso canale già in uso.">
+    <div class="eyebrow">Cosa fa Accanto</div>
+    <ul class="capability-list">
+      <li><span class="mark"></span>Rileva il campo su cui l'utente è fermo, senza interferire con la navigazione in corso</li>
+      <li><span class="mark"></span>Analizza il contesto: etichetta, tipo di campo, vincoli, campi correlati nel modulo</li>
+      <li><span class="mark"></span>Compone una spiegazione mirata: cosa inserire, in che formato, con un esempio concreto</li>
+      <li><span class="mark"></span>Restituisce la spiegazione via sintesi vocale, nello stesso flusso dello screen reader</li>
+    </ul>
+    <p class="not-list">Non modifica il modulo, non sposta il focus, non inserisce dati al posto dell'utente.</p>
+  </section>
+
+  <!-- SLIDE 2: Il problema -->
+  <section class="slide" data-notes="Questo intervento risponde a un problema strutturale di come sono costruiti molti moduli online della Pubblica Amministrazione. Etichette generiche, vincoli di formato non dichiarati nel testo, messaggi di errore poco specifici. Per chi naviga con uno screen reader, ogni campo ambiguo è un potenziale punto di blocco, e il risultato è ricorrente: abbandono del modulo, errore di compilazione, o richiesta di aiuto a un'altra persona.">
+    <div class="eyebrow">Il problema che affronta</div>
+    <ul class="capability-list">
+      <li><span class="mark"></span>Etichette generiche, mancanti o non collegate correttamente al campo</li>
+      <li><span class="mark"></span>Vincoli di formato non dichiarati nel testo del campo (lunghezza, caratteri ammessi)</li>
+      <li><span class="mark"></span>Messaggi di errore che segnalano il problema ma non spiegano come risolverlo</li>
+    </ul>
+    <p class="lede">Il risultato è ricorrente: modulo abbandonato, compilazione errata, o intervento di un'altra persona al posto dell'utente.</p>
+  </section>
+
+  <!-- SLIDE 3: Caso d'uso formalizzato -->
+  <section class="slide" data-notes="Consideriamo un caso d'uso tipico. Un utente compila un modulo della Pubblica Amministrazione da tastiera, con uno screen reader. Su un campo, lo strumento restituisce solo 'campo di testo, vuoto': nessuna etichetta chiara, nessun vincolo di formato dichiarato, nessun esempio. L'utente non ha modo di sapere cosa inserire, se non uscendo dal modulo per cercare informazioni altrove.">
+    <div class="eyebrow">Un caso d'uso tipico</div>
+    <div class="visual">
+      <svg width="200" height="136" viewBox="0 0 220 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="20" y="20" width="180" height="110" rx="8" stroke="#C7C7C7" stroke-width="2"/>
+        <rect x="38" y="42" width="110" height="10" rx="2" fill="#333333"/>
+        <rect x="38" y="66" width="144" height="26" rx="4" stroke="#A100FF" stroke-width="2.5"/>
+        <line x1="46" y1="68" x2="46" y2="90" stroke="#A100FF" stroke-width="2.5" stroke-linecap="round">
+          <animate attributeName="opacity" values="1;0;1" dur="1.1s" repeatCount="indefinite"/>
+        </line>
+        <rect x="38" y="108" width="80" height="10" rx="2" fill="#333333"/>
+      </svg>
+    </div>
+    <h1>Un utente compila un modulo pubblico da tastiera, con uno screen reader.</h1>
+    <p class="lede">Su un campo, lo screen reader riporta solo "campo di testo, vuoto": nessuna etichetta, nessun vincolo di formato, nessun esempio. Non c'è modo di sapere cosa inserire senza uscire dal modulo.</p>
+  </section>
+
+  <!-- SLIDE 4: Come si usa -->
+  <section class="slide" data-notes="L'interazione si inserisce nel flusso di navigazione già in uso, senza aggiungere una nuova interfaccia da imparare. L'utente continua a spostarsi tra i campi con Tab, come già avviene oggi. Sul campo dove è fermo, preme una scorciatoia: un'attivazione puntuale, riferita a quel campo specifico. La spiegazione arriva subito, letta dallo screen reader, e la navigazione riprende dal punto esatto in cui si era interrotta.">
+    <div class="eyebrow">Come si usa</div>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <svg width="66" height="56" viewBox="0 0 70 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="5" y="20" width="60" height="26" rx="5" stroke="#C7C7C7" stroke-width="2.5"/>
+          <text x="35" y="38" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#C7C7C7">Tab</text>
+        </svg>
+        <div class="label">Navigazione invariata</div>
+        <div class="sub">L'utente si sposta tra i campi come già fa oggi</div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="num">2</div>
+        <svg width="66" height="56" viewBox="0 0 70 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="2" y="20" width="30" height="26" rx="5" stroke="#A100FF" stroke-width="2.5"/>
+          <rect x="38" y="20" width="30" height="26" rx="5" stroke="#A100FF" stroke-width="2.5"/>
+          <text x="17" y="38" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#A100FF">?</text>
+          <text x="53" y="38" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#A100FF">A</text>
+        </svg>
+        <div class="label">Attivazione puntuale</div>
+        <div class="sub">Una scorciatoia, riferita al campo su cui si è fermi</div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="num">3</div>
+        <svg width="66" height="56" viewBox="0 0 70 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M20 20 v20 M20 20 a12 12 0 0 1 24 0 v14 a6 6 0 0 1 -12 0" stroke="#C7C7C7" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M50 22 q10 8 0 16" stroke="#C7C7C7" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div class="label">Restituzione vocale</div>
+        <div class="sub">Spiegazione letta dallo screen reader già in uso</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: Cosa riconosce nel campo -->
+  <section class="slide" data-notes="Per costruire la spiegazione, Accanto raccoglie un insieme preciso di informazioni sul campo: se ha un'etichetta esplicita oppure è ambiguo o privo di etichetta, il tipo di campo, i vincoli di formato dichiarati, ed eventuali messaggi di errore già mostrati dal modulo. Da questi elementi genera una spiegazione specifica per quel campo, non un messaggio generico ripetuto ovunque.">
+    <div class="eyebrow">Cosa riconosce nel campo</div>
+    <ul class="capability-list">
+      <li><span class="mark"></span>Presenza e chiarezza dell'etichetta: esplicita, ambigua o assente</li>
+      <li><span class="mark"></span>Tipo di campo: testo libero, data, numero, selezione da elenco</li>
+      <li><span class="mark"></span>Vincoli di formato dichiarati: lunghezza, caratteri ammessi, esempio valido</li>
+      <li><span class="mark"></span>Messaggi di errore già mostrati dal modulo, se presenti</li>
+    </ul>
+    <p class="lede">La spiegazione generata è specifica per quel campo, non un messaggio generico.</p>
+  </section>
+
+  <!-- SLIDE 6: Le competenze che lo fanno funzionare -->
+  <section class="slide" data-notes="Il funzionamento si basa su un piccolo insieme di competenze specializzate, ciascuna responsabile di un compito preciso. Una analizza il contesto del campo: etichetta, tipo, vincoli. Un'altra compone la spiegazione in un linguaggio chiaro e specifico per quel campo, non generico. Una terza restituisce il risultato tramite sintesi vocale, integrata nel flusso dello screen reader. Un ultimo controllo verifica che la spiegazione sia effettivamente coerente con il campo indicato, prima di essere restituita all'utente.">
+    <div class="eyebrow">Le competenze che lo fanno funzionare</div>
+    <ul class="capability-list">
+      <li><span class="mark"></span>Analisi del contesto — legge etichetta, tipo di campo, vincoli e campi correlati</li>
+      <li><span class="mark"></span>Composizione della spiegazione — trasforma l'analisi in un testo chiaro, specifico per quel campo</li>
+      <li><span class="mark"></span>Sintesi vocale — restituisce la spiegazione integrata nel flusso dello screen reader</li>
+      <li><span class="mark"></span>Controllo di coerenza — verifica che la spiegazione risponda davvero al campo indicato</li>
+    </ul>
+    <p class="lede">Ogni competenza copre un compito preciso; insieme costituiscono il funzionamento del prototipo.</p>
+  </section>
+
+  <!-- SLIDE 7: Prima / Dopo -->
+  <section class="slide" data-notes="Sullo stesso identico campo, il codice fiscale: senza Accanto, lo screen reader riporta solo 'campo di testo, vuoto', senza indicazioni su cosa scrivere. Con Accanto, l'utente sente: 'codice fiscale, sedici caratteri tra lettere e numeri'. È lo stesso campo del modulo, con lo stesso screen reader: cambia solo l'informazione disponibile nel momento in cui serve.">
+    <div class="eyebrow">Stesso campo, due esiti</div>
+    <div class="compare">
+      <div class="card">
+        <div class="tag">SENZA ACCANTO</div>
+        <div class="said">"Campo di testo, vuoto."</div>
+      </div>
+      <div class="card after">
+        <div class="tag">CON ACCANTO</div>
+        <div class="said">"Codice fiscale: sedici caratteri tra lettere e numeri."</div>
+      </div>
+    </div>
+    <p class="lede">Stesso campo, stesso screen reader: cambia solo l'informazione disponibile nel momento in cui serve.</p>
+  </section>
+
+  <!-- SLIDE 8: Cosa cambia -->
+  <section class="slide" data-notes="Il cambiamento è concreto: il modulo si completa nella stessa sessione, senza uscire per cercare informazioni altrove. Non serve più l'intervento di un familiare o di un operatore per un singolo campo poco chiaro. E l'autonomia dell'utente smette di dipendere dalla qualità, spesso scarsa e non uniforme, del modulo specifico che sta compilando in quel momento.">
+    <div class="eyebrow">Cosa cambia</div>
+    <ul class="capability-list">
+      <li><span class="mark"></span>Il modulo si completa nella stessa sessione, senza cercare informazioni altrove</li>
+      <li><span class="mark"></span>Non serve l'intervento di un familiare o di un operatore per un singolo campo</li>
+      <li><span class="mark"></span>L'autonomia non dipende più dalla qualità del modulo specifico</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="bar">
+  <div class="counter" id="counter" aria-hidden="true"></div>
+</footer>
+
+<div class="nav-hint">← → o Spazio per navigare</div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let idx = 0;
+
+  const counterEl = document.getElementById('counter');
+  const progressFill = document.getElementById('progressFill');
+  const notesToggle = document.getElementById('notesToggle');
+  const notesPanel = document.getElementById('notesPanel');
+  const notesText = document.getElementById('notesText');
+
+  function render(){
+    slides.forEach((s,i)=>{
+      s.classList.toggle('active', i === idx);
+    });
+    counterEl.textContent = 'Slide ' + (idx+1) + ' / ' + total;
+    progressFill.style.width = (((idx+1)/total)*100) + '%';
+    notesText.textContent = slides[idx].dataset.notes || '';
+  }
+
+  function go(delta){
+    idx = Math.min(total-1, Math.max(0, idx + delta));
+    render();
+  }
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown'){
+      e.preventDefault();
+      go(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp'){
+      e.preventDefault();
+      go(-1);
+    } else if (e.key === 'Home'){
+      idx = 0; render();
+    } else if (e.key === 'End'){
+      idx = total-1; render();
+    } else if (e.key.toLowerCase() === 'n'){
+      toggleNotes();
+    }
+  });
+
+  document.getElementById('deck').addEventListener('click', function(e){
+    const w = window.innerWidth;
+    if (e.clientX > w/2) go(1); else go(-1);
+  });
+
+  let touchStartX = null;
+  document.addEventListener('touchstart', function(e){
+    touchStartX = e.touches[0].clientX;
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if (touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50){
+      if (dx < 0) go(1); else go(-1);
+    }
+    touchStartX = null;
+  }, {passive:true});
+
+  function toggleNotes(){
+    const open = notesPanel.classList.toggle('open');
+    notesToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  notesToggle.addEventListener('click', function(e){
+    e.stopPropagation();
+    toggleNotes();
+  });
+  notesPanel.addEventListener('click', function(e){ e.stopPropagation(); });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
