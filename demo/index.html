@@ -1,0 +1,167 @@
+<!--
+  ACCANTO — Modulo di demo (sintetico, nessun dato reale). Vedi docs/action-log.md (G0).
+
+  Campi target per l'estensione (in ordine di comparsa):
+    1. #classe-invalidita — "Classe di invalidità": la percentuale/grado di invalidità civile
+       riconosciuto dalla commissione medica; determina quali prestazioni si possono richiedere.
+    2. #impegnativa       — "Impegnativa": il numero del documento medico (impegnativa/prescrizione)
+       che autorizza la prestazione richiesta.
+    3. #esenzione-ticket  — "Esenzione ticket": il codice di esenzione dal pagamento del ticket
+       sanitario, se posseduto.
+
+  Campo sensibile, caso negativo per INV-4 (non deve MAI essere letto né spiegato):
+    #pin-area-riservata (type="password").
+-->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domanda di invalidità civile — Modulo (demo Accanto)</title>
+<style>
+  :root {
+    color-scheme: light;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #000000;
+    margin: 0;
+    padding: 2rem;
+    line-height: 1.5;
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.5rem;
+    border-bottom: 3px solid #000000;
+    padding-bottom: 0.5rem;
+  }
+  fieldset {
+    border: 2px solid #000000;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+  }
+  legend {
+    font-weight: bold;
+    padding: 0 0.5rem;
+  }
+  label {
+    display: block;
+    font-weight: bold;
+    margin-top: 1rem;
+  }
+  .hint {
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0;
+  }
+  input[type="text"],
+  input[type="password"],
+  select {
+    display: block;
+    width: 100%;
+    margin-top: 0.35rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    background: #ffffff;
+    color: #000000;
+  }
+  input:focus,
+  select:focus,
+  button:focus {
+    outline: 3px solid #000000;
+    outline-offset: 2px;
+  }
+  button {
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border: 2px solid #000000;
+    border-radius: 4px;
+    background: #000000;
+    color: #ffffff;
+    cursor: pointer;
+  }
+  #esito {
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Domanda di prestazione per invalidità civile</h1>
+  <p>Modulo dimostrativo con dati sintetici. Nessuna informazione reale viene raccolta o inviata.</p>
+
+  <fieldset>
+    <legend>Area riservata</legend>
+    <label for="codice-fiscale-login">Codice fiscale</label>
+    <input type="text" id="codice-fiscale-login" name="codice-fiscale-login" autocomplete="off" placeholder="Es. RSSMRA80A01H501U">
+
+    <label for="pin-area-riservata">PIN di accesso</label>
+    <input type="password" id="pin-area-riservata" name="pin-area-riservata" autocomplete="current-password" aria-describedby="hint-pin">
+    <p class="hint" id="hint-pin">Campo sensibile: non viene mai letto dall'estensione Accanto.</p>
+  </fieldset>
+
+  <form id="modulo-domanda">
+    <fieldset>
+      <legend>Dati del richiedente</legend>
+
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" autocomplete="given-name" placeholder="Es. Marco">
+
+      <label for="cognome">Cognome</label>
+      <input type="text" id="cognome" name="cognome" autocomplete="family-name" placeholder="Es. Rossi">
+    </fieldset>
+
+    <fieldset>
+      <legend>Dati della domanda</legend>
+
+      <label for="classe-invalidita">Classe di invalidità</label>
+      <select id="classe-invalidita" name="classe-invalidita" aria-describedby="hint-classe-invalidita">
+        <option value="">— Seleziona —</option>
+        <option value="0-33">Da 0% a 33%</option>
+        <option value="34-66">Da 34% a 66%</option>
+        <option value="67-99">Da 67% a 99%</option>
+        <option value="100">100%</option>
+      </select>
+      <p class="hint" id="hint-classe-invalidita">Percentuale di invalidità civile riconosciuta dalla commissione medica competente.</p>
+
+      <label for="impegnativa">Impegnativa</label>
+      <input type="text" id="impegnativa" name="impegnativa" aria-describedby="hint-impegnativa" placeholder="Es. 123456789">
+      <p class="hint" id="hint-impegnativa">Numero del documento medico che autorizza la prestazione richiesta.</p>
+
+      <label for="esenzione-ticket">Esenzione ticket</label>
+      <input type="text" id="esenzione-ticket" name="esenzione-ticket" aria-describedby="hint-esenzione-ticket" placeholder="Es. E01 oppure Nessuna">
+      <p class="hint" id="hint-esenzione-ticket">Codice di esenzione dal pagamento del ticket sanitario, se posseduto.</p>
+    </fieldset>
+
+    <button type="submit">Invia domanda (demo)</button>
+    <p id="esito" role="status" aria-live="polite"></p>
+  </form>
+</main>
+
+<script>
+  // Solo per evitare il reload della pagina in demo: nessuna logica reale, nessuna rete.
+  document.getElementById('modulo-domanda').addEventListener('submit', function (event) {
+    event.preventDefault();
+    document.getElementById('esito').textContent = 'Demo: nessun invio reale effettuato.';
+  });
+</script>
+</body>
+</html>

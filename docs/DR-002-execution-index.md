@@ -26,8 +26,8 @@ Stati: `TODO` · `WIP` · `BLOCKED` · `DONE` · `SKIP`.
 
 | Task | Titolo | Track | Es. | Dipende da | Stato | Evidenza/Output | Aggiornato |
 |---|---|---|---|---|---|---|---|
-| TK-001.1 | G0 · Decisione modulo/campi/dominio | — | human | — | TODO | | |
-| TK-001.2 | G0 · Scaffold demo/index.html | — | agent | TK-001.1 | TODO | | |
+| TK-001.1 | G0 · Decisione modulo/campi/dominio | — | human | — | DONE | docs/action-log.md | 2026-09-14 |
+| TK-001.2 | G0 · Scaffold demo/index.html | — | agent | TK-001.1 | DONE | demo/index.html: 3 campi target etichettati (label+aria-describedby) + 1 campo sensibile (password) come caso negativo INV-4 | 2026-09-14 |
 | TK-001.3 | G0 · Verifica DOM semantico | — | human | TK-001.2 | TODO | | |
 | TK-002.1 | S1 · Contratto lib/messages.js | A | agent | TK-001.1 | TODO | | |
 | TK-002.2 | S1 · manifest.json | A | agent | TK-002.1 | TODO | | |
@@ -90,3 +90,5 @@ Stati: `TODO` · `WIP` · `BLOCKED` · `DONE` · `SKIP`.
 | Data/ora | Task | Evento (WIP/DONE/BLOCKED/STOP) | Nota |
 |---|---|---|---|
 | 2026-09-14 | — | INIT | Indice creato da DR-002; tutti i task TODO. |
+| 2026-09-14 | TK-001.1 | DONE | Modulo scelto: invalidità civile stile INPS; campi target e dominio (http://localhost) registrati in docs/action-log.md. |
+| 2026-09-14 | TK-001.2 | DONE | demo/index.html creato con i 3 campi target (#classe-invalidita, #impegnativa, #esenzione-ticket) e il campo sensibile #pin-area-riservata. In attesa di TK-001.3 (verifica umana DevTools). |

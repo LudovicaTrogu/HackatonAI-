@@ -2,6 +2,26 @@
 
 Guida per lo sviluppo agentico di questo progetto. Leggi anche [VISION.md](VISION.md) per il perché.
 
+## Documenti di progetto (indice — leggi prima di aprire i file sotto)
+
+Solo questo file (`CLAUDE.md`) viene caricato automaticamente in ogni sessione. Tutto il resto — inclusa `VISION.md` — va aperto solo quando il trigger sotto è pertinente al task in corso. Ogni riga è un puntatore: percorso, tipo, quando leggerlo. Nessuna riga qui sotto riformula un vincolo — i vincoli vincolanti sono nella sezione "Vincoli non negoziabili" più sotto, non in questo indice.
+
+| Percorso | Tipo | Quando leggerlo |
+|---|---|---|
+| [VISION.md](VISION.md) | visione | Prima di modificare persona, scope, o il perimetro delle 4 ore. |
+| [docs/DR-001-decisione-scope-architettura.md](docs/DR-001-decisione-scope-architettura.md) | decisione | Se serve capire perché l'architettura è MV3 + tab-focus + trigger esplicito (canonica, non ridiscutere — INV-10). |
+| [docs/DR-002-decisione-flotta-agenti.md](docs/DR-002-decisione-flotta-agenti.md) | decisione | Prima di cambiare la struttura della flotta di agenti/skill o il perimetro di un task. |
+| [docs/DR-002-taskboard.md](docs/DR-002-taskboard.md) | taskboard | Prima di eseguire un task della flotta: contiene il BLOCCO-CONTESTO da anteporre ai prompt dei subagenti. |
+| [docs/DR-002-execution-index.md](docs/DR-002-execution-index.md) | log-operativo | **Prima di iniziare qualunque task**: fonte di verità sullo stato dei task e sulle dipendenze DONE/BLOCKED. |
+| [docs/DR-003-modello-documentale.md](docs/DR-003-modello-documentale.md) | decisione | Se vuoi capire perché questo indice esiste e come mantenerlo. |
+| [docs/action-log.md](docs/action-log.md) | log-operativo | Prima di iniziare il codice: contiene le decisioni G0 (modulo di demo, campi target, dominio). |
+
+**Regola di manutenzione (a costo zero, non facoltativa):** chi crea o modifica un documento in `docs/` aggiunge o aggiorna la riga corrispondente in questa tabella nello stesso commit. Senza questa riga il documento resta invisibile a una sessione futura, esattamente come è successo a `DR-002-decisione-flotta-agenti.md` e `DR-002-taskboard.md` prima di DR-003.
+
+**Rimandato (livello 2, non ancora costruito):** un controllo automatico che segnali un file in `docs/` assente da questa tabella. Formalizzare se questo pattern si ripete su un secondo progetto oltre Accanto.
+
+**Re-audit:** ogni volta che una nuova decisione DR-* viene ratificata, ricontrolla che la sezione "Vincoli non negoziabili" sotto sia ancora coerente con essa e che nessuna riga di questa tabella si sia trasformata in un sommario normativo (deve restare un puntatore).
+
 ## Cosa stiamo costruendo
 
 Estensione browser **Manifest V3** che aiuta **Marco** — utente ipovedente, screen reader, solo tastiera — a capire i campi di un modulo online della PA. Marco preme una scorciatoia sul campo attivo; l'estensione legge il contesto del campo, chiede a un LLM una spiegazione in parole semplici, e la fa **annunciare dallo screen reader senza spostare il focus**.
@@ -12,18 +32,18 @@ Progetto per un hackathon: **~4 ore, priorità a una demo funzionante su un solo
 
 Il tool serve un utente di screen reader. **L'output del tool deve quindi essere esso stesso accessibile**, altrimenti il progetto fallisce nel suo stesso obiettivo. Non è un dettaglio finale, è il cuore:
 
-- La spiegazione va inserita in una **regione ARIA live** (`aria-live="polite"`, `role="status"`) così che lo screen reader la annunci automaticamente quando cambia.
-- **Mai spostare il focus** dal campo del modulo verso il pannello del suggerimento. Marco deve poter continuare a compilare da dove era.
+- La spiegazione va inserita in una **regione ARIA live** (`aria-live="polite"`, `role="status"`) così che lo screen reader la annunci automaticamente quando cambia. *(INV-7)*
+- **Mai spostare il focus** dal campo del modulo verso il pannello del suggerimento. Marco deve poter continuare a compilare da dove era. *(INV-7)*
 - Il trigger è una **scorciatoia da tastiera**, non un pulsante da cliknare col mouse.
-- Il pannello si chiude con **Esc**.
+- Il pannello si chiude con **Esc**. *(INV-7)*
 - Alto contrasto, testo ridimensionabile, rispetta `prefers-reduced-motion`. Nessuna informazione veicolata dal solo colore.
 - Testa davvero con uno screen reader (NVDA gratuito, o "Assistente vocale"/Narrator già presente su Windows: `Win + Ctrl + Invio`). Il codice generato "sembra" accessibile molto più spesso di quanto lo sia.
 
 ## Stack e vincoli tecnici
 
 - **Manifest V3**, target Chrome/Edge.
-- **Nessun build step, nessun framework, nessun bundler.** HTML + CSS + JavaScript (ES modules) puro. Questo è deliberato: massimizza la probabilità di caricare l'estensione e vederla girare senza tempo perso in tooling.
-- Nessuna dipendenza npm se evitabile. Se serve una libreria, giustificalo.
+- **Nessun build step, nessun framework, nessun bundler.** HTML + CSS + JavaScript (ES modules) puro. Questo è deliberato: massimizza la probabilità di caricare l'estensione e vederla girare senza tempo perso in tooling. *(INV-8)*
+- Nessuna dipendenza npm se evitabile. Se serve una libreria, giustificalo. *(INV-8)*
 
 ## Struttura dei file (proposta)
 
@@ -41,13 +61,17 @@ demo/                  # copia statica/mock del modulo PA per la demo (dati sint
 
 ## Confini di sicurezza (non negoziabili)
 
-- La **API key** vive in `chrome.storage.local` e viene usata **solo nel service worker** (`background.js`). Non deve mai finire in `content.js` né nel contesto della pagina.
-- La chiamata `fetch` all'LLM parte dal **service worker**, non dal content script.
-- `host_permissions` ristretti al **solo dominio del modulo di demo**. Mai `<all_urls>`.
-- Nella lettura del DOM **escludi** i campi `type="password"` e i campi con `autocomplete` di pagamento (`cc-number`, ecc.): non vanno letti né inviati.
-- Il contenuto della pagina è **non fidato**: nel prompt va delimitato come dato da spiegare, non come istruzioni. Il suggerimento è sempre informativo — l'estensione **non compila e non invia mai** campi da sola.
-- Mostra un avviso sintetico che il contenuto del campo viene inviato a un servizio AI esterno.
-- Nella demo usa **solo dati sintetici**. Mai dati personali reali del team.
+Questi vincoli, più INV-7 (sopra, in "Regola numero uno") e INV-8 (sopra, in "Stack e vincoli tecnici"), sono la fonte unica degli ID INV-1..INV-10. [docs/DR-002-decisione-flotta-agenti.md](docs/DR-002-decisione-flotta-agenti.md) li referenzia per ID e non li ridefinisce: se un giorno divergono, questo file vince.
+
+- La **API key** vive in `chrome.storage.local` e viene usata **solo nel service worker** (`background.js`). Non deve mai finire in `content.js` né nel contesto della pagina. *(INV-1)*
+- La chiamata `fetch` all'LLM parte dal **service worker**, non dal content script. *(INV-2)*
+- `host_permissions` ristretti al **solo dominio del modulo di demo**. Mai `<all_urls>`. *(INV-3)*
+- Nella lettura del DOM **escludi** i campi `type="password"` e i campi con `autocomplete` di pagamento (`cc-number`, ecc.): non vanno letti né inviati. *(INV-4)*
+- Il contenuto della pagina è **non fidato**: nel prompt va delimitato come dato da spiegare, non come istruzioni. *(INV-5)*
+- Il suggerimento è sempre informativo — l'estensione **non compila e non invia mai** campi da sola. *(INV-6)*
+- Mostra un avviso sintetico che il contenuto del campo viene inviato a un servizio AI esterno. *(requisito aggiuntivo di questo file, non in DR-002)*
+- Nella demo usa **solo dati sintetici**. Mai dati personali reali del team. *(INV-9)*
+- Le decisioni [DR-001](docs/DR-001-decisione-scope-architettura.md) e [DR-002](docs/DR-002-decisione-flotta-agenti.md) sono canoniche: non ridiscuterle nel merito durante l'implementazione. *(INV-10)*
 
 ## Affidabilità della demo
 
