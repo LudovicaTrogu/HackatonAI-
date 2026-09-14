@@ -44,16 +44,16 @@ Stati: `TODO` · `WIP` · `BLOCKED` · `DONE` · `SKIP`.
 | TK-008.1 | S5 · Test L1 statici | B | agent | TK-002.2, TK-004.2 | TODO | | |
 | TK-008.2 | S5 · Test L2 DOM fixture | B | agent | TK-004.2 | TODO | | |
 | TK-008.3 | S5 · Spike Playwright (cap 20') | B | agent | TK-008.2 | TODO | | |
-| TK-009.1 | S6 · Persona & Barriera | B | either | demo osservabile | TODO | | |
-| TK-009.2 | S6 · Percorso Assistito (before/after) | B | either | demo osservabile | TODO | | |
+| TK-009.1 | S6 · Persona & Barriera | B | either | demo osservabile | DONE | docs/deliverable-1-persona-barriera.md: persona Marco + momento del blocco su #classe-invalidita (demo/index.html), con nota sugli altri 2 campi target | 2026-09-14 |
+| TK-009.2 | S6 · Percorso Assistito (before/after) | B | either | demo osservabile | DONE | docs/deliverable-2-percorso-assistito.md: before/after su #classe-invalidita (stesso campo/persona di TK-009.1); "dopo" dichiarato come progetto vincolato dai contratti (manifest.json, lib/messages.js), non ancora verificato end-to-end (TK-014 pendente) | 2026-09-14 |
 | TK-009.3 | S6 · Autonomia & Limiti + nota AI | B | either | TK-006 | TODO | | |
 | TK-010 | Skill extract-field-context | B | agent | TK-004.1 | TODO | | |
 | TK-011 | Skill prompt-da-dato-non-fidato | A | agent | TK-003.1 | TODO | | |
 | TK-012 | Skill announce-aria-live | B | agent | TK-004.2 | TODO | | |
 | TK-013 | Skill test-annuncio-screen-reader | B | agent | TK-008.1/.2/.3 | TODO | | |
 | TK-014 | G-SR · Test screen reader reale | — | human | build integrata | TODO | | |
-| TK-015 | Runbook/README della demo | — | either | TK-001, TK-002.2 (DONE) | WIP | presa in carico (sessione coordinamento) | 2026-09-14 |
-| TK-016 | Script della demo live | — | either | demo osservabile (G0 DONE) | WIP | presa in carico (sessione coordinamento) | 2026-09-14 |
+| TK-015 | Runbook/README della demo | — | either | TK-001, TK-002.2 (DONE) | WIP | docs/RUNBOOK.md bozza: passi 1-2 pronti; 3-5 TODO finché Fase 1 non è DONE | 2026-09-14 |
+| TK-016 | Script della demo live | — | either | demo osservabile (G0 DONE) | DONE | docs/demo-script.md: scaletta before/after su 2-3 campi + frase AI | 2026-09-14 |
 
 ## Mappa file → task owner (un file, un solo owner)
 
@@ -109,3 +109,9 @@ Stati: `TODO` · `WIP` · `BLOCKED` · `DONE` · `SKIP`.
 | 2026-09-14 | TK-004.2 | DONE | content.js scritto: onMessage listener sul trigger, extractFieldContext + createExplainRequest via import() dinamico, isSensitive short-circuit (INV-4), regione ARIA live .accanto-panel/.accanto-panel__text (role=status, aria-live=polite), Esc chiude, mai .focus() (INV-7). node non disponibile in questo ambiente (come TK-003.1/TK-004.1): nessun check automatico né verifica browser reale eseguiti in questa sessione agente. |
 | 2026-09-14 | TK-004.2 | COORDINAMENTO (non-blocking per questo task, ma essenziale per TK-003.3) | background.js è ancora placeholder TODO: non esiste un contratto congelato per il messaggio background→content che deve segnalare la pressione della scorciatoia "spiega-campo". content.js ha quindi DEFINITO IN LOCALE (non in lib/messages.js, che resta congelato) la forma provvisoria { type: "ACCANTO_TRIGGER_EXPLAIN" } e ascolta quella. TK-003.3, quando implementerà chrome.commands.onCommand → chrome.tabs.sendMessage in background.js, DEVE inviare esattamente questa forma (o coordinarsi per cambiarla in entrambi i file) — non inventare un protocollo diverso in parallelo. |
 | 2026-09-14 | TK-004.2 | BLOCCO POTENZIALE per manifest.json (owner TK-002.2, fuori dal mio allowed_scope=[content.js]) | content.js importa lib/messages.js e lib/context.js con import() dinamico (chrome.runtime.getURL(...)), perché Manifest V3 non supporta import statico nei content script dichiarati via "content_scripts" (verificato: "type":"module" lì non ha effetto). L'import() dinamico da un content script verso un URL chrome-extension:// richiede però che il file sia elencato in "web_accessible_resources" nel manifest — al momento manifest.json NON lo dichiara, quindi a runtime la import() fallirebbe (intercettata dal try/catch, mostra comunque un messaggio neutro invece di un errore muto, ma la spiegazione reale non arriverebbe mai). Serve che l'owner di manifest.json aggiunga, ad es.: {"web_accessible_resources":[{"resources":["lib/messages.js","lib/context.js"],"matches":["http://localhost/*"]}]}. Da verificare/chiudere prima o durante TK-006 (SEC-GATE). |
+2026-09-14 | TK-016 | DONE | docs/demo-script.md creato (scaletta before/after + frase AI). Rifinire dopo build. |
+| 2026-09-14 | TK-015 | WIP | docs/RUNBOOK.md bozza: passi 1-2 eseguibili; 3-5 TODO fino a Fase 1 DONE. |
+| 2026-09-14 | TK-009.1 | WIP | Preso in carico: deliverable "Persona & Barriera" in docs/. Dipendenza "demo osservabile" verificata DONE (TK-001.2/.3). |
+| 2026-09-14 | TK-009.1 | DONE | docs/deliverable-1-persona-barriera.md creato: ancorato a demo/index.html (#classe-invalidita come momento esatto del blocco) e action-log.md. Indice CLAUDE.md aggiornato (DR-003). |
+| 2026-09-14 | TK-009.2 | WIP | Preso in carico: deliverable "Percorso Assistito (before/after)" in docs/. Dipendenza "demo osservabile" verificata DONE (TK-001.2/.3). |
+| 2026-09-14 | TK-009.2 | DONE | docs/deliverable-2-percorso-assistito.md creato: before osservato + after di progetto sullo stesso campo/persona di TK-009.1, con nota esplicita che il giro end-to-end non è ancora implementato/verificato (TK-002.3/003.x/004.x/TK-014). Indice CLAUDE.md aggiornato (DR-003). |
